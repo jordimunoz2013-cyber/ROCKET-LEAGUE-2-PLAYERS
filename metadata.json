@@ -1,0 +1,6 @@
+{
+  "name": "Rocket League 2 Players",
+  "description": "A polished two-player local multiplayer top-down soccer car battle game with smooth physics, particle effects, boost pads, and audio feedback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
