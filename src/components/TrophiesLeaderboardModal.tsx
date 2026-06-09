@@ -50,14 +50,14 @@ export const getLeagueInfo = (trophies: number, language: Language = 'en') => {
   if (trophies >= 200) {
     return {
       name: language === 'ca' ? 'Argent ⬜' : language === 'es' ? 'Plata ⬜' : 'Silver ⬜',
-      color: 'text-zinc-300 bg-zinc-300/10 border-zinc-350/20',
+      color: 'text-zinc-300 bg-zinc-300/10 border-zinc-300/20',
       icon: '⬜',
       desc: language === 'ca' ? 'Pilot provat amb tàctiques de rebot estables.' : language === 'es' ? 'Piloto consolidado con tácticas estables .' : 'Stable bounce tactician with seasoned flight hours.'
     };
   }
   return {
     name: language === 'ca' ? 'Bronze 🟫' : language === 'es' ? 'Bronce 🟫' : 'Bronze 🟫',
-    color: 'text-orange-600 bg-orange-600/10 border-orange-650/20',
+    color: 'text-orange-500 bg-orange-500/10 border-orange-500/20',
     icon: '🟫',
     desc: language === 'ca' ? 'Àrea inicial professional per rookies de forces G.' : language === 'es' ? 'Piloto novato ganando momentum.' : 'G-force rookie gaining initial launch trajectory.'
   };
@@ -119,7 +119,7 @@ export const TrophiesLeaderboardModal: React.FC<TrophiesLeaderboardModalProps> =
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
-        className="w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/98 shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col relative"
+        className="w-full max-w-3xl max-h-[95vh] overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/98 shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col relative"
       >
         {/* Top styling band */}
         <div className="h-1.5 w-full bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 animate-pulse" />
@@ -227,11 +227,11 @@ export const TrophiesLeaderboardModal: React.FC<TrophiesLeaderboardModalProps> =
                   <span>🟨 GOLD</span>
                   <span className="font-extrabold">500 - 999 KP</span>
                 </div>
-                <div className="flex justify-between items-center text-zinc-350">
+                <div className="flex justify-between items-center text-zinc-300">
                   <span>⬜ SILVER</span>
                   <span className="font-extrabold">200 - 499 KP</span>
                 </div>
-                <div className="flex justify-between items-center text-orange-655 text-zinc-550">
+                <div className="flex justify-between items-center text-orange-500">
                   <span>🟫 BRONZE</span>
                   <span className="font-extrabold">0 - 199 KP</span>
                 </div>

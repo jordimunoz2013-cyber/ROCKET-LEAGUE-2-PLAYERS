@@ -413,6 +413,47 @@ export const MainMenu: React.FC<MainMenuProps> = ({
                 </div>
               </div>
 
+              {/* USER MODE CHOICE BAR: MANAGER vs PLAYER */}
+              <div className="grid grid-cols-2 gap-3 mb-4 mt-1 bg-black/40 border border-white/5 p-2 rounded-2xl">
+                <button
+                  onClick={() => {
+                    sounds.playCountdownBeep(true);
+                    onOpenManager();
+                  }}
+                  className="group relative bg-[#030d1d] hover:bg-cyan-950/40 border border-cyan-500/25 hover:border-cyan-400 text-white py-4 px-3 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex flex-col items-center justify-center gap-1.5 rounded-xl shadow-[0_4px_20px_rgba(6,182,212,0.04)]"
+                >
+                  <Shield className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
+                  <div className="text-center">
+                    <span className="font-mono text-[7px] font-bold text-cyan-400 uppercase tracking-widest leading-none block mb-0.5">
+                      {language === 'es' ? 'RECLUTAR & SIMULAR' : language === 'ca' ? 'MODO ORGANITZADOR' : 'SIMULATE & MANAGE'}
+                    </span>
+                    <span className="font-black uppercase italic tracking-wider text-[10.5px] text-white group-hover:text-cyan-400 block leading-none">
+                      📋 {language === 'es' ? 'MODO MANAGER' : language === 'ca' ? 'MODE MANAGER' : 'MANAGER MODE'}
+                    </span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => {
+                    sounds.playCountdownBeep(true);
+                    // Focus or point them down to standard 1v1 keys
+                    sounds.playBoost();
+                    onStartGame('same_laptop');
+                  }}
+                  className="group relative bg-[#1c1206] hover:bg-amber-950/40 border border-amber-500/25 hover:border-amber-400 text-white py-4 px-3 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex flex-col items-center justify-center gap-1.5 rounded-xl shadow-[0_4px_20px_rgba(245,158,11,0.04)]"
+                >
+                  <Play className="w-5 h-5 text-amber-500 fill-amber-500/10 group-hover:scale-110 transition-transform duration-200" />
+                  <div className="text-center">
+                    <span className="font-mono text-[7px] font-bold text-amber-400 uppercase tracking-widest leading-none block mb-0.5">
+                      {language === 'es' ? 'CONTROL REAL J1 / J2' : language === 'ca' ? 'JOC DIRECT CIRCUIT' : 'PLAY VOLTAGE 1V1'}
+                    </span>
+                    <span className="font-black uppercase italic tracking-wider text-[10.5px] text-white group-hover:text-amber-400 block leading-none">
+                      🎮 {language === 'es' ? 'MODO JUGADOR' : language === 'ca' ? 'MODE JUGADOR' : 'PLAYER MODE'}
+                    </span>
+                  </div>
+                </button>
+              </div>
+
               {/* Mode A: same_laptop */}
               <button
                 onClick={() => {

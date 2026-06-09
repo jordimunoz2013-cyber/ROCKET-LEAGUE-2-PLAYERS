@@ -493,26 +493,26 @@ export const ScoreOverlay: React.FC<ScoreOverlayProps> = ({
 
               </div>
 
-              {/* REPLAY SAVE BLOCK */}
-              <div className="w-full mt-2 border-t border-white/10 pt-4 flex flex-col gap-4">
+              {/* REPLAY SAVE BLOCK (OPTIONAL & FLUID) */}
+              <div className="w-full mt-2 border-t border-white/10 pt-4 flex flex-col gap-3">
                 {!hasSaved ? (
-                  <div className="space-y-3 bg-violet-950/20 border border-violet-500/15 p-4 rounded-xl">
-                    <div className="text-left">
-                      <span className="text-[10px] font-black tracking-widest text-violet-400 uppercase font-mono block mb-1">
-                        {language === 'es' ? '🔒 GUARDAR REPETICIÓN DEL PARTIDO' : language === 'ca' ? '🔒 DESAR REPLECIÓ DEL PARTIT' : '🔒 ACTION REQUIRED: SAVE REPLAY'}
+                  <div className="space-y-2 bg-violet-950/10 border border-violet-500/10 p-3.5 rounded-xl text-left">
+                    <div>
+                      <span className="text-[9.5px] font-black tracking-widest text-violet-400 uppercase font-mono block mb-0.5">
+                        🎥 {language === 'es' ? 'COPIA COMPACTA DE HIGHLIGHTS' : language === 'ca' ? 'HIGHLIGHTS DEL PARTIT' : 'PERSIST MATCH HIGHLIGHTS'}
                       </span>
-                      <p className="text-[10px] text-slate-400 leading-normal">
-                        {language === 'es' ? 'Guarda los momentos destacados en tu Teatro de Repeticiones.' : language === 'ca' ? 'Desa els moments destacats al teu Teatre de Repeticions.' : 'Give a name to your thrilling match highlights.'}
+                      <p className="text-[9px] text-slate-400 leading-normal">
+                        {language === 'es' ? 'Guarda este partido en tu Teatro de Repeticiones para analizar tus toques.' : language === 'ca' ? 'Desa aquest partit al teu Teatre de Repeticions.' : 'Save this matchup history to replay and review your strategies.'}
                       </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-2 w-full">
+                    <div className="flex flex-col sm:flex-row gap-2 w-full mt-1.5">
                       <input
                         type="text"
                         placeholder="Choose replay name..."
                         value={replayName}
                         onChange={(e) => setReplayName(e.target.value)}
-                        className="flex-1 bg-zinc-950 border border-white/10 px-3 py-2 text-xs text-white placeholder-zinc-500 rounded-lg focus:outline-none focus:border-violet-500/50 transition-all font-mono uppercase"
+                        className="flex-1 bg-zinc-950 border border-white/10 px-3 py-1.5 text-xs text-white placeholder-zinc-550 rounded-lg focus:outline-none focus:border-violet-500/50 transition-all font-mono uppercase"
                       />
                       <button
                         onClick={() => {
@@ -520,7 +520,7 @@ export const ScoreOverlay: React.FC<ScoreOverlayProps> = ({
                           onSaveReplay(finalName);
                           setHasSaved(true);
                         }}
-                        className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 text-white font-black uppercase text-[10px] tracking-widest rounded-lg transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(139,92,246,0.3)] border border-violet-500/25"
+                        className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 text-white font-black uppercase text-[10px] tracking-widest rounded-lg transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 shadow-[0_0_12px_rgba(139,92,246,0.25)] border border-violet-500/20"
                       >
                         <Film className="w-3.5 h-3.5" />
                         <span>{t.saveReplayText}</span>
@@ -528,46 +528,43 @@ export const ScoreOverlay: React.FC<ScoreOverlayProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl py-2 px-3 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-[0.15em] text-center flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.05)]"
+                      className="bg-emerald-500/10 border border-emerald-500/25 rounded-xl py-2 px-3 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-[0.15em] text-center flex items-center justify-center gap-2"
                     >
                       <span>✓ {language === 'es' ? 'REPETICIÓN GUARDADA:' : language === 'ca' ? 'REPETICIÓ GUARDADA:' : 'REPLAY PERSISTED:'} "{replayName.toUpperCase()}"</span>
                     </motion.div>
-
-                    {/* Actions and Instant Playback */}
-                    <div className="flex flex-col gap-2 w-full">
-                      {onPlayLatestReplay && (
-                        <button
-                          onClick={onPlayLatestReplay}
-                          className="group relative bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 text-white py-3 px-8 overflow-hidden transition-all active:scale-95 cursor-pointer font-black uppercase italic tracking-wider text-xs flex items-center justify-center gap-2 rounded-xl border border-violet-500/25"
-                        >
-                          <Film className="w-3.5 h-3.5 animate-pulse" />
-                          <span className="relative z-10">{language === 'es' ? 'Ver Repetición Ahora 🎥' : language === 'ca' ? 'Veure Repetició Ara 🎥' : 'Watch Replay Now 🎥'}</span>
-                        </button>
-                      )}
-
-                      <div className="flex flex-col sm:flex-row gap-2 w-full">
-                        <button
-                          onClick={onRestart}
-                          className="group relative bg-white text-black px-6 py-2.5 overflow-hidden transition-all active:scale-95 cursor-pointer flex-1 font-black uppercase italic tracking-wider text-[10px] flex items-center justify-center gap-2 rounded-lg"
-                        >
-                          <span className="relative z-10">{language === 'es' ? 'Jugar de Nuevo' : language === 'ca' ? 'Jugar de Nou' : 'Play Again'}</span>
-                          <div className={`absolute top-0 right-0 h-full w-0 ${winner === 'blue' ? 'bg-blue-500' : 'bg-red-500'} group-hover:w-3 transition-all`}></div>
-                        </button>
-                        
-                        <button
-                          onClick={onExit}
-                          className="px-5 py-2.5 rounded-lg bg-zinc-900 border border-white/5 text-slate-300 font-bold cursor-pointer hover:bg-zinc-850 hover:text-white transition active:scale-95 text-[10px] uppercase font-mono flex-1"
-                        >
-                          {t.exit}
-                        </button>
-                      </div>
-                    </div>
+                    {onPlayLatestReplay && (
+                      <button
+                        onClick={onPlayLatestReplay}
+                        className="group relative bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 text-white py-2 px-6 overflow-hidden transition-all active:scale-95 cursor-pointer font-black uppercase italic tracking-wider text-xs flex items-center justify-center gap-2 rounded-xl border border-violet-500/20"
+                      >
+                        <Film className="w-3.5 h-3.5 animate-pulse" />
+                        <span className="relative z-10">{language === 'es' ? 'Ver Repetición Ahora 🎥' : language === 'ca' ? 'Veure Repetició Ara 🎥' : 'Watch Replay Now 🎥'}</span>
+                      </button>
+                    )}
                   </div>
                 )}
+
+                {/* ALWAYS VISIBLE ACTION CONTROLS */}
+                <div className="flex flex-col sm:flex-row gap-2 w-full mt-2">
+                  <button
+                    onClick={onRestart}
+                    className="group relative bg-white text-black px-6 py-2.5 overflow-hidden transition-all active:scale-95 cursor-pointer flex-1 font-black uppercase italic tracking-wider text-[10px] flex items-center justify-center gap-2 rounded-lg border border-white"
+                  >
+                    <span className="relative z-10">{language === 'es' ? 'Jugar de Nuevo' : language === 'ca' ? 'Jugar de Nou' : 'Play Again'}</span>
+                    <div className={`absolute top-0 right-0 h-full w-0 ${winner === 'blue' ? 'bg-blue-500' : 'bg-red-500'} group-hover:w-3 transition-all`}></div>
+                  </button>
+                  
+                  <button
+                    onClick={onExit}
+                    className="px-5 py-2.5 rounded-lg bg-zinc-900 border border-white/5 text-slate-300 font-bold cursor-pointer hover:bg-zinc-800 hover:text-white transition active:scale-95 text-[10px] uppercase font-mono flex-1"
+                  >
+                    {t.exit}
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}

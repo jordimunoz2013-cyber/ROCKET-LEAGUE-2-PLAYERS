@@ -660,7 +660,7 @@ export class GameEngine {
   public resolveCornersCollision(obj: { x: number; y: number; vx: number; vy: number; radius?: number }) {
     const cornerSize = 110;
     const r = obj.radius || 22; // default radius
-    const bRes = 0.65;
+    const bRes = CONFIG.ballBounciness !== undefined ? (CONFIG.ballBounciness * 0.9) : 0.65;
     let collided = false;
 
     // 1. Top-Left Corner
@@ -779,7 +779,7 @@ export class GameEngine {
     const maxBoostSpeed = profile.maxBoostSpeed * wheelMult.speed;
     const maxSpeed = car.isBoosting ? maxBoostSpeed : maxBaseSpeed;
 
-    const friction = 0.985;
+    const friction = CONFIG.carPhysicsFriction !== undefined ? CONFIG.carPhysicsFriction : 0.985;
 
     // Forward/Backward acceleration
     if (isUp) {
@@ -848,8 +848,9 @@ export class GameEngine {
     }
 
     // Move
-    car.x += car.vx;
-    car.y += car.vy;
+    const speedMult = CONFIG.gameSpeed || 1.0;
+    car.x += car.vx * speedMult;
+    car.y += car.vy * speedMult;
 
     // Boost Pad Collisions
     this.boostPads.forEach(pad => {
@@ -958,14 +959,15 @@ export class GameEngine {
       ball.vy = (ball.vy / bSpeed) * maxBSpeed;
     }
 
-    ball.x += ball.vx;
-    ball.y += ball.vy;
+    const speedMult = CONFIG.gameSpeed || 1.0;
+    ball.x += ball.vx * speedMult;
+    ball.y += ball.vy * speedMult;
 
     const minGoalY = (this.height - CONFIG.goalHeight) / 2;
     const maxGoalY = (this.height + CONFIG.goalHeight) / 2;
     const inYGoalRange = ball.y >= minGoalY && ball.y <= maxGoalY;
 
-    const bRes = 0.72; // Bounce restitution
+    const bRes = CONFIG.ballBounciness !== undefined ? CONFIG.ballBounciness : 0.72; // Bounce restitution
 
     // Goal Post Bounces: Top and Bottom Posts for both Left and Right Goals
     const posts = [

@@ -291,6 +291,26 @@ export default function App() {
     return saved === null ? true : saved === 'true';
   });
 
+  // Workshop Physics Customizable States
+  const [customGameSpeed, setCustomGameSpeed] = useState<number>(() => {
+    return parseFloat(localStorage.getItem('mini_rocket_custom_gamespeed') || '1.0');
+  });
+  const [customMaxScore, setCustomMaxScore] = useState<number>(() => {
+    return parseInt(localStorage.getItem('mini_rocket_custom_maxscore') || '5', 10);
+  });
+  const [customMatchDuration, setCustomMatchDuration] = useState<number>(() => {
+    return parseInt(localStorage.getItem('mini_rocket_custom_matchduration') || '300', 10);
+  });
+  const [customBallRadius, setCustomBallRadius] = useState<number>(() => {
+    return parseInt(localStorage.getItem('mini_rocket_custom_ballradius') || '32', 10);
+  });
+  const [customBallBounciness, setCustomBallBounciness] = useState<number>(() => {
+    return parseFloat(localStorage.getItem('mini_rocket_custom_ballbounciness') || '0.72');
+  });
+  const [customCarFriction, setCustomCarFriction] = useState<number>(() => {
+    return parseFloat(localStorage.getItem('mini_rocket_custom_carfriction') || '0.985');
+  });
+
   const handleDisplayModeChange = (mode: 'fullscreen' | 'borderless' | 'windowed') => {
     setDisplayMode(mode);
     localStorage.setItem('mini_rocket_display_mode', mode);
@@ -428,6 +448,40 @@ export default function App() {
     }
   }, [redConfig]);
 
+  // Sync custom physics state values directly into global ENGINE CONFIG constants
+  useEffect(() => {
+    CONFIG.gameSpeed = customGameSpeed;
+    localStorage.setItem('mini_rocket_custom_gamespeed', String(customGameSpeed));
+  }, [customGameSpeed]);
+
+  useEffect(() => {
+    CONFIG.maxScore = customMaxScore;
+    localStorage.setItem('mini_rocket_custom_maxscore', String(customMaxScore));
+  }, [customMaxScore]);
+
+  useEffect(() => {
+    CONFIG.matchDurationSeconds = customMatchDuration;
+    localStorage.setItem('mini_rocket_custom_matchduration', String(customMatchDuration));
+  }, [customMatchDuration]);
+
+  useEffect(() => {
+    CONFIG.ballRadius = customBallRadius;
+    localStorage.setItem('mini_rocket_custom_ballradius', String(customBallRadius));
+    if (engineRef.current && engineRef.current.ball) {
+      engineRef.current.ball.radius = customBallRadius;
+    }
+  }, [customBallRadius]);
+
+  useEffect(() => {
+    CONFIG.ballBounciness = customBallBounciness;
+    localStorage.setItem('mini_rocket_custom_ballbounciness', String(customBallBounciness));
+  }, [customBallBounciness]);
+
+  useEffect(() => {
+    CONFIG.carPhysicsFriction = customCarFriction;
+    localStorage.setItem('mini_rocket_custom_carfriction', String(customCarFriction));
+  }, [customCarFriction]);
+
   // Initialise Game Engine once on mount & Load Saved Replays
   useEffect(() => {
     engineRef.current = new GameEngine();
@@ -444,6 +498,18 @@ export default function App() {
       engineRef.current.cars.red.colorSecondary = redConfig.secondary;
       engineRef.current.cars.red.decal = redConfig.decal || 'none';
       engineRef.current.cars.red.wheels = redConfig.wheels || 'classic';
+
+      // Load custom physics coefficients
+      CONFIG.gameSpeed = customGameSpeed;
+      CONFIG.maxScore = customMaxScore;
+      CONFIG.matchDurationSeconds = customMatchDuration;
+      CONFIG.ballRadius = customBallRadius;
+      CONFIG.ballBounciness = customBallBounciness;
+      CONFIG.carPhysicsFriction = customCarFriction;
+      
+      if (engineRef.current.ball) {
+        engineRef.current.ball.radius = customBallRadius;
+      }
     }
 
     // Check if muted defaults to any local preference if needed
@@ -2818,6 +2884,23 @@ export default function App() {
         onDisplayModeChange={handleDisplayModeChange}
         trainingAssist={trainingAssist}
         onTrainingAssistChange={handleTrainingAssistChange}
+
+        // Pass new customizable workshop properties
+        gameSpeed={customGameSpeed}
+        onGameSpeedChange={setCustomGameSpeed}
+        maxScore={customMaxScore}
+        onMaxScoreChange={setCustomMaxScore}
+        matchDuration={customMatchDuration}
+        onMatchDurationChange={setCustomMatchDuration}
+        ballRadius={customBallRadius}
+        onBallRadiusChange={setCustomBallRadius}
+        ballBounciness={customBallBounciness}
+        onBallBouncinessChange={setCustomBallBounciness}
+        carFriction={customCarFriction}
+        onCarFrictionChange={setCustomCarFriction}
+
+        blueConfig={blueConfig}
+        onUpdateBlueConfig={handleUpdateBlueConfig}
       />
 
       {/* Dynamic Team Squad Manager Mode */}

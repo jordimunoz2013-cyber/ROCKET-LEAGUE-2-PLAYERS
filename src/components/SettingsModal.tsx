@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Settings, Volume2, Eye, Key, Sliders, Check, Monitor, ShieldAlert } from 'lucide-react';
+import { X, Settings, Volume2, Eye, Key, Sliders, Check, Monitor, Palette } from 'lucide-react';
 import { TRANSLATIONS, Language } from '../localization';
 
 interface SettingsModalProps {
@@ -22,6 +22,24 @@ interface SettingsModalProps {
   onDisplayModeChange: (mode: 'fullscreen' | 'borderless' | 'windowed') => void;
   trainingAssist: boolean;
   onTrainingAssistChange: (on: boolean) => void;
+
+  // New customizable props for "In settings I must custom all"
+  gameSpeed: number;
+  onGameSpeedChange: (speed: number) => void;
+  maxScore: number;
+  onMaxScoreChange: (score: number) => void;
+  matchDuration: number;
+  onMatchDurationChange: (duration: number) => void;
+  ballRadius: number;
+  onBallRadiusChange: (radius: number) => void;
+  ballBounciness: number;
+  onBallBouncinessChange: (bounciness: number) => void;
+  carFriction: number;
+  onCarFrictionChange: (friction: number) => void;
+
+  // Car customizer colors and cosmetics (Team blue)
+  blueConfig: { primary: string; secondary: string; model?: string; decal?: string; wheels?: string };
+  onUpdateBlueConfig: (config: any) => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -43,9 +61,87 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onDisplayModeChange,
   trainingAssist,
   onTrainingAssistChange,
+
+  // Workshop physics & cosmetic settings
+  gameSpeed,
+  onGameSpeedChange,
+  maxScore,
+  onMaxScoreChange,
+  matchDuration,
+  onMatchDurationChange,
+  ballRadius,
+  onBallRadiusChange,
+  ballBounciness,
+  onBallBouncinessChange,
+  carFriction,
+  onCarFrictionChange,
+
+  blueConfig,
+  onUpdateBlueConfig,
 }) => {
   const t = TRANSLATIONS[language];
-  const [activeTab, setActiveTab] = useState<'general' | 'audio' | 'controls'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'audio' | 'controls' | 'physics'>('general');
+
+  // Backup and restore progression functions
+  const handleExportProgress = () => {
+    const keys = [
+      'mini_rocket_coins',
+      'mini_rocket_player_trophies',
+      'mini_rocket_player_name',
+      'mini_rocket_unlocked_cars',
+      'mini_rocket_unlocked_wheels',
+      'mini_rocket_unlocked_palettes',
+      'mini_rocket_unlocked_decals',
+      'mini_rocket_selected_stadium',
+      'mini_rocket_blue_config',
+      'mini_rocket_red_config',
+      'mini_rocket_saved_replays',
+      'mini_rocket_bp_active_season_idx',
+    ];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('mini_rocket_bp_xp_') || k.startsWith('mini_rocket_bp_lvl_') || k.startsWith('mini_rocket_bp_premium_') || k.startsWith('mini_rocket_bp_claimed_'))) {
+        keys.push(k);
+      }
+    }
+    const backup: Record<string, string | null> = {};
+    keys.forEach(k => {
+      backup[k] = localStorage.getItem(k);
+    });
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `liga_cars_profile_backup.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportProgress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const backup = JSON.parse(event.target?.result as string);
+        if (typeof backup !== 'object' || backup === null) {
+          throw new Error('Invalid JSON format');
+        }
+        Object.entries(backup).forEach(([key, val]) => {
+          if (key.startsWith('mini_rocket_') && typeof val === 'string') {
+            localStorage.setItem(key, val);
+          }
+        });
+        alert(language === 'es' ? '¡Progreso restaurado con éxito! Recargando...' : language === 'ca' ? '¡Progrés restaurat amb èxit! Recarregant...' : 'Progression profile restored successfully! Reloading...');
+        window.location.reload();
+      } catch (err) {
+        alert(language === 'es' ? 'Error: El archivo no es una copia de seguridad válida.' : 'Error: Selected file is not a valid progression backup.');
+      }
+    };
+    reader.readAsText(file);
+  };
 
   if (!isOpen) return null;
 
@@ -61,7 +157,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           className="relative w-full max-w-xl bg-[#09090b]/98 border border-zinc-800 rounded-2xl flex flex-col max-h-[90vh] shadow-[0_30px_70px_rgba(0,0,0,0.9)] overflow-hidden font-sans"
         >
           {/* Header */}
-          <div className="p-6 border-b border-zinc-800/80 flex items-center justify-between">
+          <div className="p-6 border-b border-zinc-800/80 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
                 <Settings className="w-5 h-5 animate-spin-slow" />
@@ -83,11 +179,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Sub Menu Navbar */}
-          <div className="flex border-b border-zinc-800 bg-zinc-950/40 p-1 gap-1">
+          <div className="flex border-b border-zinc-800 bg-zinc-950/40 p-1 gap-1 overflow-x-auto shrink-0 scrollbar-none">
             <button
               onClick={() => setActiveTab('general')}
-              className={`flex-1 py-3 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all ${
-                activeTab === 'general' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-300'
+              className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg cursor-pointer transition-all shrink-0 ${
+                activeTab === 'general' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-350'
               }`}
             >
               <Sliders className="w-3.5 h-3.5" />
@@ -95,8 +191,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('audio')}
-              className={`flex-1 py-3 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all ${
-                activeTab === 'audio' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-300'
+              className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg cursor-pointer transition-all shrink-0 ${
+                activeTab === 'audio' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-350'
               }`}
             >
               <Volume2 className="w-3.5 h-3.5" />
@@ -104,17 +200,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('controls')}
-              className={`flex-1 py-3 text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg cursor-pointer transition-all ${
-                activeTab === 'controls' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-300'
+              className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg cursor-pointer transition-all shrink-0 ${
+                activeTab === 'controls' ? 'bg-zinc-900 border border-white/5 text-white' : 'text-zinc-500 hover:text-zinc-350'
               }`}
             >
               <Key className="w-3.5 h-3.5" />
               <span>Telegraphy</span>
             </button>
+            <button
+              onClick={() => setActiveTab('physics')}
+              className={`px-3 py-2 text-[10px] font-black uppercase tracking-wider flex items-center justify-center gap-1.5 rounded-lg cursor-pointer transition-all shrink-0 ${
+                activeTab === 'physics' ? 'bg-amber-500/10 border border-amber-500/35 text-amber-400 font-bold' : 'text-zinc-500 hover:text-zinc-350'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5 text-amber-500" />
+              <span>🔧 WORKSHOP TUNER</span>
+            </button>
           </div>
 
           {/* Content Body */}
-          <div className="flex-1 p-6 overflow-y-auto space-y-6 relative z-10 custom-scrollbar max-h-[50vh]">
+          <div className="flex-1 p-6 overflow-y-auto space-y-6 relative z-10 custom-scrollbar max-h-[55vh]">
             
             {activeTab === 'general' && (
               <div className="space-y-6">
@@ -221,13 +326,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       );
                     })}
                   </div>
-                  <p className="text-[9px] text-zinc-500 font-medium italic mt-1 leading-none">
-                    {language === 'es' 
-                      ? '* Pantalla Completa es el modo por defecto para máxima inmersión en el estadio.' 
-                      : language === 'ca'
-                      ? '* Pantalla Sencera utilitza el màxim rendiment adaptatiu de l\'estadi.'
-                      : '* Full Screen is optimized for fluid AAA esports-style stadium broadcast.'}
-                  </p>
                 </div>
 
                 {/* 5. Tactical Training Flight Assist Prediction */}
@@ -253,6 +351,39 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         }`}
                       />
                     </button>
+                  </div>
+                </div>
+
+                {/* 6. SAVE, DOWNLOAD PROFILE AND EXPOSE OFFLINE COPIES */}
+                <div className="space-y-2.5 bg-[#140c04]/40 border border-amber-500/15 p-4 rounded-xl text-left">
+                  <span className="text-[11px] font-black uppercase text-amber-500 tracking-wider font-mono block">
+                    📥 {language === 'es' ? 'RESPALDAR Y EXPORTAR PROGRESO' : language === 'ca' ? 'DISTRIBUCIÓ DE PROGRÉS (JSON)' : 'OFFLINE DOWNLOAD & SAVE PROGRESSION'}
+                  </span>
+                  <p className="text-[9.5px] text-zinc-400 leading-normal mb-3">
+                    {language === 'es'
+                      ? 'Descarga tu perfil (monedas, trofeos, nivel, vehículos desbloqueados, repeticiones) para jugar sin perder tu partida.'
+                      : language === 'ca'
+                      ? 'Descarrega el teu perfil de seguretat en format JSON per protegir tota la teva partida.'
+                      : 'Download your fully saved live progression indicators (trophies, coins, high scores, replays, garage unlocks) as an offline backup file.'}
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button
+                      onClick={handleExportProgress}
+                      className="px-4 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 font-extrabold text-[10.5px] uppercase rounded-lg transition active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+                    >
+                      💾 {language === 'es' ? 'Exportar Perfil' : language === 'ca' ? 'Exportar' : 'Export Profile'}
+                    </button>
+                    
+                    <label className="px-4 py-2 bg-[#020202] hover:bg-zinc-900 border border-zinc-800 text-zinc-300 font-extrabold text-[10.5px] uppercase rounded-lg transition active:scale-95 cursor-pointer flex items-center justify-center gap-1.5 flex-1 text-center">
+                      <span>📤 {language === 'es' ? 'Importar Perfil' : language === 'ca' ? 'Importar' : 'Import Progress'}</span>
+                      <input
+                        type="file"
+                        accept=".json"
+                        onChange={handleImportProgress}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 </div>
 
@@ -320,9 +451,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onChange={(e) => onCameraSensitivityChange(parseFloat(e.target.value))}
                     className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-violet-500"
                   />
-                  <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider mt-1">
-                    Affects visual orbit rotation delays and cinematically panned smoothing ratios
-                  </p>
                 </div>
 
                 {/* Keys layout mappings */}
@@ -357,10 +485,211 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
             )}
 
+            {activeTab === 'physics' && (
+              <div className="space-y-5">
+                <div className="bg-amber-950/15 border border-amber-500/20 p-4 rounded-xl space-y-4 text-left">
+                  <h3 className="text-xs font-black tracking-widest text-amber-400 uppercase font-mono">
+                    🪐 SYSTEM PHYSICS COEFFICIENTS
+                  </h3>
+                  
+                  {/* Game Timescale Speed Slider */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-extrabold text-[#f3f4f6]">GAME TIMESCALE SPEED</span>
+                      <span className="font-mono text-[11px] text-amber-400 font-bold">{gameSpeed.toFixed(2)}x</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="2.0"
+                      step="0.05"
+                      value={gameSpeed}
+                      onChange={(e) => onGameSpeedChange(parseFloat(e.target.value))}
+                      className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <p className="text-[8px] text-zinc-500 uppercase font-mono font-bold leading-none">
+                      Speeds up or slows down the simulation clock (0.50x to 2.00x)
+                    </p>
+                  </div>
+
+                  {/* Ball Bounciness Restitution */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-extrabold text-[#f3f4f6]">BALL BOUNCINESS (RESTITUTION)</span>
+                      <span className="font-mono text-[11px] text-amber-400 font-bold">{ballBounciness.toFixed(2)}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.10"
+                      max="1.20"
+                      step="0.05"
+                      value={ballBounciness}
+                      onChange={(e) => onBallBouncinessChange(parseFloat(e.target.value))}
+                      className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <p className="text-[8px] text-zinc-500 uppercase font-mono font-bold leading-none">
+                      Controls how elastically the ball rebounds from boundaries and goalposts
+                    </p>
+                  </div>
+
+                  {/* Car Friction Traction Coefficient */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-extrabold text-[#f3f4f6]">CAR TYRE GRIP & TRACTION</span>
+                      <span className="font-mono text-[11px] text-amber-400 font-bold">
+                        {carFriction === 0.995 ? "Perfect Grip Asphalt 🏎️" : carFriction <= 0.950 ? "Ice Drift ❄️" : "Radial Grid 🛞"}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.900"
+                      max="0.995"
+                      step="0.005"
+                      value={carFriction}
+                      onChange={(e) => onCarFrictionChange(parseFloat(e.target.value))}
+                      className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <p className="text-[8px] text-zinc-500 uppercase font-mono font-bold leading-none">
+                      Tyre friction dampener on acceleration drift vector alignments
+                    </p>
+                  </div>
+
+                  {/* Ball Physical Radius (Size) */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-extrabold text-[#f3f4f6]">STADIUM BALL SIZE</span>
+                      <span className="font-mono text-[11px] text-amber-400 font-bold">{ballRadius}px</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="16"
+                      max="56"
+                      step="4"
+                      value={ballRadius}
+                      onChange={(e) => onBallRadiusChange(parseInt(e.target.value, 10))}
+                      className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <p className="text-[8px] text-zinc-500 uppercase font-mono font-bold leading-none">
+                      Controls physical volume space occupied by active ball (16px - 56px)
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl space-y-4 text-left">
+                  <h3 className="text-xs font-black tracking-widest text-[#38bdf8] uppercase font-mono">
+                    🏁 MATCH RULES & CHASSIS COSMETICS
+                  </h3>
+
+                  {/* Match Goal Limits */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase text-zinc-400 font-mono">GOAL MATCH TERMINATOR LIMIT</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[3, 5, 7, 10].map(val => (
+                        <button
+                          key={val}
+                          onClick={() => onMaxScoreChange(val)}
+                          className={`py-1.5 rounded-lg text-xs font-mono font-bold border transition-all cursor-pointer ${
+                            maxScore === val 
+                              ? 'bg-sky-500/10 border-sky-500 text-sky-400 shadow-lg' 
+                              : 'bg-zinc-950 border-zinc-900 text-zinc-500 hover:text-white'
+                          }`}
+                        >
+                          {val} Goals
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Match Timer Limit */}
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black uppercase text-zinc-400 font-mono">MATCH DURATION TIMER</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[60, 120, 180, 300].map(val => (
+                        <button
+                          key={val}
+                          onClick={() => onMatchDurationChange(val)}
+                          className={`py-1.5 rounded-lg text-xxs font-mono font-bold border transition-all cursor-pointer ${
+                            matchDuration === val 
+                              ? 'bg-sky-500/10 border-sky-500 text-sky-400 shadow-lg' 
+                              : 'bg-zinc-950 border-zinc-900 text-zinc-500 hover:text-white'
+                          }`}
+                        >
+                          {val === 60 ? "1 Mins" : val === 120 ? "2 Mins" : val === 180 ? "3 Mins" : "5 Mins"}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* TEAM COLOR TUNNERS */}
+                  <div className="space-y-2.5 border-t border-zinc-800/80 pt-3 flex flex-col gap-2">
+                    <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider font-mono">🎨 MY CAR PAINT GRAPHIC COLORS</span>
+                    
+                    <div className="flex flex-col sm:flex-row gap-3.5">
+                      <div className="flex-1 space-y-1">
+                        <span className="text-[8px] font-black uppercase tracking-wider text-zinc-500 font-mono block">PRIMARY BASE COAT</span>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={blueConfig.primary}
+                            onChange={(e) => onUpdateBlueConfig({ ...blueConfig, primary: e.target.value })}
+                            className="w-10 h-8 rounded border border-white/10 bg-transparent cursor-pointer"
+                          />
+                          <span className="text-[10px] font-mono uppercase text-white font-black">{blueConfig.primary}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex-1 space-y-1">
+                        <span className="text-[8px] font-black uppercase tracking-wider text-zinc-500 font-mono block">SECONDARY TRIM PAINT</span>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={blueConfig.secondary}
+                            onChange={(e) => onUpdateBlueConfig({ ...blueConfig, secondary: e.target.value })}
+                            className="w-10 h-8 rounded border border-white/10 bg-transparent cursor-pointer"
+                          />
+                          <span className="text-[10px] font-mono uppercase text-white font-black">{blueConfig.secondary}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CHASSIS STYLE AND DECAL SELECTION */}
+                  <div className="grid grid-cols-2 gap-3 border-t border-zinc-800/80 pt-3">
+                    <div className="space-y-1.5 text-left">
+                      <label className="text-[9px] font-black uppercase text-zinc-500 font-mono block">CHASSIS BODY DESIGN</label>
+                      <select
+                        value={blueConfig.model || 'interstellar'}
+                        onChange={(e) => onUpdateBlueConfig({ ...blueConfig, model: e.target.value })}
+                        className="bg-zinc-950 border border-zinc-800 rounded px-2 py-1.5 text-[9px] text-white uppercase font-mono font-bold w-full focus:outline-none"
+                      >
+                        {['interstellar', 'beast', 'spectre_f1', 'cyberspace', 'phantom_gt', 'apex_interceptor', 'phoenix_vtol', 'centurion_gt_x', 'infinity_void', 'grim_reaper'].map(m => (
+                          <option key={m} value={m}>{m.replace('_', ' ')}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="space-y-1.5 text-left">
+                      <label className="text-[9px] font-black uppercase text-zinc-500 font-mono block">WHEELS TYPE RIM</label>
+                      <select
+                        value={blueConfig.wheels || 'classic'}
+                        onChange={(e) => onUpdateBlueConfig({ ...blueConfig, wheels: e.target.value })}
+                        className="bg-zinc-950 border border-zinc-800 rounded px-2 py-1.5 text-[9px] text-white uppercase font-mono font-bold w-full focus:outline-none"
+                      >
+                        {['classic', 'cyber', 'magma', 'frost', 'gold_star'].map(w => (
+                          <option key={w} value={w}>{w}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            )}
+
           </div>
 
           {/* Footer Save Row */}
-          <div className="p-4 border-t border-zinc-800/80 bg-zinc-950 flex justify-end">
+          <div className="p-4 border-t border-zinc-800/80 bg-zinc-950 flex justify-end shrink-0">
             <button
               onClick={onClose}
               className="px-6 py-2 bg-white text-black hover:bg-zinc-200 transition-all text-xs font-black uppercase italic tracking-wide cursor-pointer active:scale-95 shadow-md"

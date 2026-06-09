@@ -351,7 +351,7 @@ export const BattlePassModal: React.FC<BattlePassModalProps> = ({
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 30 }}
-        className={`w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/10 ${activeSeason.bgGradient} shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col relative`}
+        className={`w-full max-w-4xl max-h-[95vh] overflow-hidden rounded-3xl border border-white/10 ${activeSeason.bgGradient} shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-col relative`}
         style={{
           boxShadow: `0 0 50px -10px ${activeSeason.accentGlow}`
         }}
@@ -381,7 +381,7 @@ export const BattlePassModal: React.FC<BattlePassModalProps> = ({
                   key={sz.id}
                   onClick={() => setActiveSeasonIndex(sIdx)}
                   className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer transition-all ${
-                    activeSeasonIndex === sIdx ? `bg-gradient-to-br ${sz.themeColor} text-white shadow-md` : 'text-zinc-500 hover:text-zinc-350'
+                    activeSeasonIndex === sIdx ? `bg-gradient-to-br ${sz.themeColor} text-white shadow-md` : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                   title={sz.name}
                 >
@@ -513,7 +513,7 @@ export const BattlePassModal: React.FC<BattlePassModalProps> = ({
             </div>
 
             <div className="bg-black/30 border border-white/5 p-4 rounded-2xl text-[9px] font-mono text-zinc-500 space-y-1">
-              <span className="font-extrabold uppercase text-zinc-450 block mb-1">💡 PROGRESSION LOGS:</span>
+              <span className="font-extrabold uppercase text-zinc-400 block mb-1">💡 PROGRESSION LOGS:</span>
               <p>• Every match played: +25 Battle Pass XP</p>
               <p>• XP matches are computed regardless of win or lose outcome.</p>
               <p>• Change active season anytime! All progress persists safely.</p>

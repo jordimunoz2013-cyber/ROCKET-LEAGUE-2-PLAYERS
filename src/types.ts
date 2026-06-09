@@ -7,6 +7,11 @@ export interface GameConfig {
   carWidth: number;
   carHeight: number;
   maxScore: number;
+  gameSpeed?: number;
+  ballBounciness?: number;
+  carPhysicsFriction?: number;
+  boostStrengthLevel?: number;
+  matchDurationSeconds?: number;
 }
 
 export const CONFIG: GameConfig = {
@@ -18,6 +23,11 @@ export const CONFIG: GameConfig = {
   carWidth: 55,
   carHeight: 32,
   maxScore: 5,
+  gameSpeed: 1.0,
+  ballBounciness: 0.72,
+  carPhysicsFriction: 0.985,
+  boostStrengthLevel: 1.0,
+  matchDurationSeconds: 300,
 };
 
 export interface BallState {
