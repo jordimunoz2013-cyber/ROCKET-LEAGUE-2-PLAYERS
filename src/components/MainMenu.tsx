@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Play, Volume2, VolumeX, Shield, Zap, Keyboard, Film, Sparkles, Coins, X } from 'lucide-react';
+import { Play, Volume2, VolumeX, Shield, Zap, Keyboard, Film, Sparkles, Coins, X, Settings, Crown, Trophy } from 'lucide-react';
 import { sounds } from '../audio';
 import { SavedReplay, GameMode } from '../types';
 import { ReplayTheatre } from './ReplayTheatre';
 import { GarageMarket } from './GarageMarket';
+import { TRANSLATIONS, Language } from '../localization';
 
 interface MainMenuProps {
   onStartGame: (mode: GameMode) => void;
@@ -16,16 +17,24 @@ interface MainMenuProps {
   coins: number;
   onBuyCar: (modelId: string, price: number) => void;
   unlockedModels: string[];
-  blueConfig: { model: string; primary: string; secondary: string; decal?: string };
-  redConfig: { model: string; primary: string; secondary: string; decal?: string };
-  onUpdateBlueConfig: (config: { model: string; primary: string; secondary: string; decal?: string }) => void;
-  onUpdateRedConfig: (config: { model: string; primary: string; secondary: string; decal?: string }) => void;
+  blueConfig: { model: string; primary: string; secondary: string; decal?: string; wheels?: string };
+  redConfig: { model: string; primary: string; secondary: string; decal?: string; wheels?: string };
+  onUpdateBlueConfig: (config: { model: string; primary: string; secondary: string; decal?: string; wheels?: string }) => void;
+  onUpdateRedConfig: (config: { model: string; primary: string; secondary: string; decal?: string; wheels?: string }) => void;
   unlockedPalettes: string[];
   onBuyPalette: (paletteName: string, price: number) => void;
   unlockedDecals: string[];
   onBuyDecal: (decalId: string, price: number) => void;
+  unlockedWheels: string[];
+  onBuyWheel: (wheelId: string, price: number) => void;
   selectedStadium: string;
   onSelectStadium: (stadiumId: string) => void;
+  onOpenCareer: () => void;
+  onOpenSettings: () => void;
+  onOpenManager: () => void;
+  onOpenBattlePass?: () => void;
+  onOpenTrophies?: () => void;
+  language?: Language;
 }
 
 export interface Stadium {
@@ -238,12 +247,22 @@ export const MainMenu: React.FC<MainMenuProps> = ({
   onBuyPalette,
   unlockedDecals,
   onBuyDecal,
+  unlockedWheels,
+  onBuyWheel,
   selectedStadium,
   onSelectStadium,
+  onOpenCareer,
+  onOpenSettings,
+  onOpenManager,
+  onOpenBattlePass,
+  onOpenTrophies,
+  language = 'en',
 }) => {
+  const t = TRANSLATIONS[language || 'en'];
   const [isTheatreOpen, setIsTheatreOpen] = useState(false);
   const [isGarageOpen, setIsGarageOpen] = useState(false);
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'quick_1v1' | 'campaign_league' | 'training'>('quick_1v1');
 
   return (
     <div id="main-menu-overlay" className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[#050505]/98 backdrop-blur-xl px-4 overflow-y-auto">
@@ -262,85 +281,333 @@ export const MainMenu: React.FC<MainMenuProps> = ({
         className="text-center mb-12 max-w-2xl relative z-10"
       >
         <div className="font-sans text-[11px] font-black tracking-[0.45em] text-cyan-400 bg-cyan-950/40 px-5 py-2.5 rounded-full border border-cyan-500/20 uppercase mb-5 shadow-[0_0_20px_rgba(34,211,238,0.15)] inline-block animate-pulse">
-          ⚡ ROCKET LEAGUE 2 PLAYERS ⚡
+          ⚡ ROCKET CARS ⚡
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-extrabold italic tracking-tighter uppercase leading-none bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-yellow-200 to-red-400 drop-shadow-[0_4px_25px_rgba(255,255,255,0.15)] font-sans">
-          ROCKET LEAGUE 2 PLAYERS
+        <h1 className="text-5xl md:text-7xl font-extrabold italic tracking-tighter uppercase leading-none bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-400 drop-shadow-[0_4px_25px_rgba(255,255,255,0.15)] font-sans animate-pulse">
+          🚗 ROCKET CARS
         </h1>
-        <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-zinc-400 to-red-500 font-black tracking-[0.4em] uppercase text-sm mt-3">
-          1VS1 ARCADE DUEL
+        <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-fuchsia-500 font-black tracking-[0.4em] uppercase text-sm mt-3">
+          FUTURISTIC ARCADE ARENA CHAMPIONS
         </div>
 
         <p className="text-slate-400 text-xs md:text-sm mt-5 max-w-md mx-auto leading-relaxed">
-          ROCKET LEAGUE 2 PLAYERS. Boost, drift, strike and flip straight into the goal cages!
+          Slam the thrusters, burn the boost, drift with high-G physics, and blast the ball directly into the neon goal gates!
         </p>
       </motion.div>
 
       {/* Main Action area matching Immersive UI starts here */}
       <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-lg">
         
-        {/* Game Mode Launcher Columns */}
-        <div className="w-full flex flex-col gap-3.5 mb-1 bg-black/30 border border-white/5 rounded-2xl p-4 backdrop-blur-md">
-          {/* Mode A: same_laptop */}
+        {/* Navigation Tabs */}
+        <div className="flex w-full bg-zinc-950/90 border border-zinc-850 p-1 rounded-2xl mb-1 gap-1 relative z-10 select-none shadow-lg">
           <button
             onClick={() => {
               sounds.playCountdownBeep(true);
-              onStartGame('same_laptop');
+              setActiveTab('quick_1v1');
             }}
-            className="w-full group relative bg-[#020202] border border-zinc-800 hover:border-blue-500/50 text-white px-5 py-3.5 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(59,130,246,0.02)]"
+            className={`flex-1 py-3 px-2 text-center rounded-xl transition-all text-xs font-black uppercase tracking-wider cursor-pointer ${
+              activeTab === 'quick_1v1'
+                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+            }`}
           >
-            <div className="flex flex-col items-start text-left z-10">
-              <span className="font-mono text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none mb-1">LOCAL MULTIPLAYER</span>
-              <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-blue-400">1VS1 SAME LAPTOP</span>
-              <span className="text-[10px] text-zinc-500 font-medium">Standard keyboard duel controls for P1 & P2</span>
-            </div>
-            <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-blue-500/50 flex items-center justify-center shrink-0">
-              <Play className="w-3.5 h-3.5 fill-blue-400/10 text-blue-400 ml-0.5" />
-            </div>
-            <div className="absolute top-0 right-0 h-full w-0 bg-blue-500 group-hover:w-2 transition-all"></div>
+            {language === 'es' ? 'RÁPIDO 1vs1' : language === 'ca' ? 'RÀPID 1vs1' : 'QUICK 1vs1'}
+          </button>
+          
+          <button
+            onClick={() => {
+              sounds.playCountdownBeep(true);
+              setActiveTab('campaign_league');
+            }}
+            className={`flex-1 py-3 px-2 text-center rounded-xl transition-all text-xs font-black uppercase tracking-wider cursor-pointer ${
+              activeTab === 'campaign_league'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.5)]'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+            }`}
+          >
+            {language === 'es' ? 'CAMPAÑA' : language === 'ca' ? 'CAMPANYA' : 'CAMPAIGNS'}
           </button>
 
-          {/* Mode B: vs_bot */}
           <button
             onClick={() => {
               sounds.playCountdownBeep(true);
-              onStartGame('vs_bot');
+              setActiveTab('training');
             }}
-            className="w-full group relative bg-[#020202] border border-zinc-800 hover:border-violet-500/50 text-white px-5 py-3.5 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(139,92,246,0.02)]"
+            className={`flex-1 py-3 px-2 text-center rounded-xl transition-all text-xs font-black uppercase tracking-wider cursor-pointer ${
+              activeTab === 'training'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)]'
+                : 'text-zinc-400 hover:text-white hover:bg-zinc-900'
+            }`}
           >
-            <div className="flex flex-col items-start text-left z-10">
-              <span className="font-mono text-[9px] font-bold text-violet-400 uppercase tracking-widest leading-none mb-1">CHALLENGE ARENA</span>
-              <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-violet-400">1VS1 VS SKILLED BOT</span>
-              <span className="text-[10px] text-zinc-500 font-medium">Test your skills against an advanced autopilot driver</span>
-            </div>
-            <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-violet-500/50 flex items-center justify-center shrink-0">
-              <Zap className="w-3.5 h-3.5 fill-violet-400 text-violet-400 animate-pulse" />
-            </div>
-            <div className="absolute top-0 right-0 h-full w-0 bg-violet-500 group-hover:w-2 transition-all"></div>
-          </button>
-
-          {/* Mode C: bot_vs_bot */}
-          <button
-            onClick={() => {
-              sounds.playCountdownBeep(true);
-              onStartGame('bot_vs_bot');
-            }}
-            className="w-full group relative bg-[#020202] border border-zinc-800 hover:border-red-500/50 text-white px-5 py-3.5 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(239,68,68,0.02)]"
-          >
-            <div className="flex flex-col items-start text-left z-10">
-              <span className="font-mono text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none mb-1">SPECTATE AUTO-SIM</span>
-              <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-red-400">1VS1 BOT VS BOT</span>
-              <span className="text-[10px] text-zinc-500 font-medium">Observe dynamic tactical simulated auto play</span>
-            </div>
-            <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-red-500/50 flex items-center justify-center shrink-0">
-              <Shield className="w-3.5 h-3.5 text-red-500" />
-            </div>
-            <div className="absolute top-0 right-0 h-full w-0 bg-red-500 group-hover:w-2 transition-all"></div>
+            {language === 'es' ? 'PRÁCTICAS' : language === 'ca' ? 'PRÀCTIQUES' : 'PRACTICE'}
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 w-full">
+        {/* Game Mode Launcher Columns */}
+        <div className="w-full flex flex-col gap-3.5 mb-1 bg-black/30 border border-white/5 rounded-2xl p-4 backdrop-blur-md">
+          {activeTab === 'campaign_league' && (
+            <>
+              {/* Mode 0: FUTURE PRO CAREER MODE (Story Mode) */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onOpenCareer();
+                }}
+                className="w-full group relative bg-[#090518] border border-violet-850 hover:border-violet-500/85 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_0_25px_rgba(139,92,246,0.1)] rounded-xl"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                  <span className="font-mono text-[8.5px] font-black text-rose-400 uppercase tracking-[0.2em] leading-none mb-1.5 flex items-center gap-1 animate-pulse">
+                    👑 {language === 'es' ? 'HISTORIA INTERACTIVA • SALA DE PRENSA' : language === 'ca' ? 'HISTÒRIA INTERACTIVA • SALA DE PREMSA' : 'STORY INTERACTIVE • DYNAMIC PRESS ROOM'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-xs md:text-sm leading-tight text-white group-hover:text-violet-400 flex items-center gap-1.5">
+                    🌟 {t.careerTitle}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 font-medium">{t.careerDesc}</span>
+                </div>
+                <div className="relative z-10 w-8 h-8 rounded-full border border-violet-700/50 bg-violet-950/20 group-hover:border-violet-400 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-4 h-4 text-violet-400 group-hover:animate-spin" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-violet-500 group-hover:w-2 transition-all"></div>
+              </button>
+            </>
+          )}
+
+          {/* Mode 0b: PRO SQUAD MANAGER FOOTBALL CLUB MODE */}
+          {activeTab === 'campaign_league' && (
+            <button
+              onClick={() => {
+                sounds.playCountdownBeep(true);
+                onOpenManager();
+              }}
+              className="w-full group relative bg-[#020914] border border-blue-950 hover:border-blue-550/80 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_0_25px_rgba(59,130,246,0.1)] rounded-xl"
+            >
+              <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                <span className="font-mono text-[8.5px] font-black text-cyan-400 uppercase tracking-[0.2em] leading-none mb-1.5 flex items-center gap-1">
+                  📈 {language === 'es' ? 'ESTRATEGIA • AUTOPILOTO TÁCTICO' : language === 'ca' ? 'ESTRATÈGIA • AUTOPILOT TÀCTIC' : 'SQUAD STRATEGY • TACTICAL AUTOPILOT'}
+                </span>
+                <span className="font-black uppercase italic tracking-wide text-xs md:text-sm leading-tight text-white group-hover:text-cyan-400 flex items-center gap-1.5">
+                  📊 {t.managerTitle}
+                </span>
+                <span className="text-[10px] text-zinc-400 font-medium">{t.managerDesc}</span>
+              </div>
+              <div className="relative z-10 w-8 h-8 rounded-full border border-cyan-700/50 bg-cyan-950/20 group-hover:border-cyan-400 flex items-center justify-center shrink-0">
+                <Shield className="w-4 h-4 text-cyan-400 group-hover:animate-bounce" />
+              </div>
+              <div className="absolute top-0 right-0 h-full w-0.5 bg-cyan-500 group-hover:w-2 transition-all"></div>
+            </button>
+          )}
+
+          {/* Mode A, B, C for quick_1v1 */}
+          {activeTab === 'quick_1v1' && (
+            <>
+              {/* LIGA CARS inside Large Title Area */}
+              <div className="text-center py-2.5 mb-1.5 border border-amber-500/10 bg-amber-950/20 rounded-xl relative overflow-hidden">
+                {/* Visual glowing underline */}
+                <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+                <h2 className="text-3xl md:text-4xl font-black italic tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 drop-shadow-[0_4px_10px_rgba(245,158,11,0.25)] flex items-center justify-center gap-2 animate-pulse leading-none">
+                  🏆 LIGA CARS 🏆
+                </h2>
+                <div className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-mono mt-1 font-bold leading-none text-center w-full">
+                  {language === 'es' ? 'CAMPEONATO DE ENFRENTAMIENTO DIRECTO' : language === 'ca' ? 'CAMPIONAT DE DUELS DIRECTES' : 'DIRECT COMBAT CHAMPIONSHIP'}
+                </div>
+              </div>
+
+              {/* Mode A: same_laptop */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onStartGame('same_laptop');
+                }}
+                className="w-full group relative bg-[#020202] border border-zinc-805 hover:border-blue-500/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(59,130,246,0.02)] rounded-xl"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                  <span className="font-mono text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none mb-1">
+                    {language === 'es' ? 'MULTIJUGADOR LOCAL' : language === 'ca' ? 'MUTLIJUGADOR LOCAL' : 'LOCAL MULTIPLAYER'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-blue-400">
+                    {t.sameLaptop.toUpperCase()}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 font-medium">
+                    {language === 'es' ? 'Doble control en un único teclado para J1 y J2' : language === 'ca' ? 'Doble control en un únic teclat per J1 i J2' : 'Standard keyboard duel controls for P1 & P2'}
+                  </span>
+                </div>
+                <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-blue-500/50 flex items-center justify-center shrink-0">
+                  <Play className="w-3.5 h-3.5 fill-blue-400/10 text-blue-400 ml-0.5" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-blue-500 group-hover:w-2 transition-all"></div>
+              </button>
+
+              {/* Mode B: vs_bot */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onStartGame('vs_bot');
+                }}
+                className="w-full group relative bg-[#020202] border border-zinc-805 hover:border-violet-500/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(139,92,246,0.02)] rounded-xl"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                  <span className="font-mono text-[9px] font-bold text-violet-400 uppercase tracking-widest leading-none mb-1">
+                    {language === 'es' ? 'ARENA DE DESAFÍO' : language === 'ca' ? 'SORRA DE DESAFIAMENT' : 'CHALLENGE ARENA'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-violet-400">
+                    {t.vsBot.toUpperCase()}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 font-medium font-sans">
+                    {language === 'es' ? 'Prueba tu destreza contra un piloto automatizado inteligente' : language === 'ca' ? 'Prova la teva destresa contra un pilot automatitzat intel·ligent' : 'Test your skills against an advanced autopilot driver'}
+                  </span>
+                </div>
+                <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-violet-500/55 flex items-center justify-center shrink-0">
+                  <Zap className="w-3.5 h-3.5 fill-violet-400 text-violet-400 animate-pulse" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-violet-500 group-hover:w-2 transition-all"></div>
+              </button>
+
+              {/* Mode C: bot_vs_bot */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onStartGame('bot_vs_bot');
+                }}
+                className="w-full group relative bg-[#020202] border border-zinc-805 hover:border-red-500/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(239,68,68,0.02)] rounded-xl"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                  <span className="font-mono text-[9px] font-bold text-red-500 uppercase tracking-widest leading-none mb-1">
+                    {language === 'es' ? 'MODO ESPECTADOR' : language === 'ca' ? 'ESPECTADOR AUTÒNOM' : 'SPECTATE AUTO-SIM'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-sm leading-tight text-white group-hover:text-red-400 font-medium">
+                    {t.botVsBot.toUpperCase()}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 font-medium">
+                    {language === 'es' ? 'Observa partidos tácticos disputados en autopilot por bots' : language === 'ca' ? 'Observa duels tàctics completats en autopilot per bots' : 'Observe dynamic tactical simulated auto play'}
+                  </span>
+                </div>
+                <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-805 group-hover:border-red-500/50 flex items-center justify-center shrink-0">
+                  <Shield className="w-3.5 h-3.5 text-red-500" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-red-500 group-hover:w-2 transition-all"></div>
+              </button>
+            </>
+          )}
+
+          {/* TAB 3: DRILLS & PRACTICE */}
+          {activeTab === 'training' && (
+            <>
+              {/* Free training */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onStartGame('free_practice');
+                }}
+                className="w-full group relative bg-[#020202] border border-zinc-805 hover:border-emerald-555/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between rounded-xl shadow-[0_4px_24px_rgba(16,185,129,0.02)]"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4">
+                  <span className="font-mono text-[8.5px] font-bold text-emerald-400 uppercase tracking-widest leading-none mb-1">
+                    {language === 'es' ? 'ENTRENAMIENTO LIBRE' : language === 'ca' ? 'PRÀCTICA LLIURE' : 'FREE PRACTICE'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-xs md:text-sm leading-none text-white group-hover:text-emerald-400 font-bold">
+                    {language === 'es' ? 'PRÁCTICA LIBRE' : language === 'ca' ? 'PRÀCTIQUES' : 'SANDBOX TRAINING'}
+                  </span>
+                  <p className="text-[10px] text-zinc-400 font-medium mt-1 leading-normal font-sans">
+                    {language === 'es' ? 'Conduce y patea el balón sin defensores' : language === 'ca' ? 'Condueix i colpeja la pilota sense oposició' : 'Drive and strike ball without defenders'}
+                  </p>
+                </div>
+                <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-emerald-500/50 flex items-center justify-center shrink-0">
+                  <Play className="w-3.5 h-3.5 text-emerald-400" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-emerald-500 group-hover:w-2 transition-all font-mono"></div>
+              </button>
+
+              {/* Machine auto launcher */}
+              <button
+                onClick={() => {
+                  sounds.playCountdownBeep(true);
+                  onStartGame('machine_practice');
+                }}
+                className="w-full group relative bg-[#020202] border border-zinc-805 hover:border-amber-555/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between rounded-xl shadow-[0_4px_24px_rgba(245,158,11,0.02)]"
+              >
+                <div className="flex flex-col items-start text-left z-10 w-full pr-4 font-mono">
+                  <span className="font-mono text-[8.5px] font-bold text-amber-500 uppercase tracking-widest leading-none mb-1">
+                    {language === 'es' ? 'LANZADOR DE BALONES' : language === 'ca' ? 'LLANÇADOR DE PILOTES' : 'DEFENSE & PASS MACHINE'}
+                  </span>
+                  <span className="font-black uppercase italic tracking-wide text-xs md:text-sm leading-none text-white group-hover:text-amber-400 font-bold font-mono">
+                    {language === 'es' ? 'MÁNAGER DE CHUTES' : language === 'ca' ? 'MÀNAGER DE SUT' : 'AUTOMATIC LAUNCHER'}
+                  </span>
+                  <p className="text-[10px] text-zinc-400 font-medium mt-1 leading-normal">
+                    {language === 'es' ? 'Intercepta disparos del lanzador automático' : language === 'ca' ? 'Rebutja les pilotes xutades de forma automàtica' : 'Deflect and intercept balls fired by launcher'}
+                  </p>
+                </div>
+                <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-amber-550/50 flex items-center justify-center shrink-0">
+                  <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                </div>
+                <div className="absolute top-0 right-0 h-full w-0.5 bg-amber-500 group-hover:w-2 transition-all font-mono"></div>
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* NEW PREMIUM BATTLE PASS & TROPHY ARENA ACTION TRIGGERS Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+          {/* Battle Pass Premium Trigger button with sleek golden/pink premium styling */}
+          <button
+            onClick={() => {
+              sounds.playCountdownBeep(true);
+              if (onOpenBattlePass) onOpenBattlePass();
+            }}
+            className="group relative bg-[#090514] border border-purple-950/40 hover:border-purple-500/50 text-white px-5 py-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(168,85,247,0.05)] rounded-2xl"
+          >
+            <div className="flex items-center gap-3 z-10 text-left">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-purple-500/20 transition-all duration-300">
+                <Crown className="w-5 h-5 text-purple-400 fill-purple-400 group-hover:animate-bounce" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-mono text-[9px] font-bold text-purple-400 uppercase tracking-widest leading-none mb-1">
+                  {language === 'es' ? 'PASO DE BATALLA PREMIUM' : language === 'ca' ? 'PAS DE BATALLA RECOMPENS_SEASONS' : 'ACTIVE SEASON PASS'}
+                </span>
+                <span className="font-black uppercase italic tracking-wide text-sm leading-none text-white group-hover:text-purple-300">
+                  {language === 'es' ? 'PASO DE RECOMPENSAS' : language === 'ca' ? 'PAS DE BATALLA' : 'BATTLE PASS TRACKS'}
+                </span>
+              </div>
+            </div>
+            <div className="font-mono text-xxs bg-purple-500/20 border border-purple-500/30 text-purple-300 py-1 px-2.5 rounded-lg font-bold">
+              {language === 'es' ? 'TIER GRÀTIS / PRO' : language === 'ca' ? 'GRATUÏT / PRO' : 'FREE / ADVANCED'}
+            </div>
+            {/* Subtle light effect */}
+            <div className="absolute top-0 right-0 w-16 h-16 bg-purple-500/10 rounded-full blur-xl pointer-events-none" />
+            <div className="absolute top-0 right-0 h-full w-0 bg-purple-500 group-hover:w-1.5 transition-all"></div>
+          </button>
+
+          {/* Trophy Arena Leaderboard Trigger button with glowing blue/cyan competitive styling */}
+          <button
+            onClick={() => {
+              sounds.playCountdownBeep(true);
+              if (onOpenTrophies) onOpenTrophies();
+            }}
+            className="group relative bg-[#03080e] border border-cyan-950/40 hover:border-cyan-500/50 text-white px-5 py-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between shadow-[0_4px_24px_rgba(6,182,212,0.05)] rounded-2xl"
+          >
+            <div className="flex items-center gap-3 z-10 text-left">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-cyan-500/20 transition-all duration-300">
+                <Trophy className="w-5 h-5 text-cyan-400 group-hover:animate-spin" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-mono text-[9px] font-bold text-cyan-400 uppercase tracking-widest leading-none mb-1">
+                  {language === 'es' ? 'ARENA COMPETITIVA LIGA' : language === 'ca' ? 'ARENA CLASSIFICATÒRIA' : 'LEAGUE CARS CHAMPIONS'}
+                </span>
+                <span className="font-black uppercase italic tracking-wide text-sm leading-none text-white group-hover:text-cyan-300">
+                  {language === 'es' ? 'TABLA DE CLASIFICACIÓN' : language === 'ca' ? 'LIGA DE TROFEUS' : 'TROPHY LEADERBOARD'}
+                </span>
+              </div>
+            </div>
+            <div className="font-mono text-xxs bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 py-1 px-2.5 rounded-lg font-bold">
+              {language === 'es' ? 'CLASIFICAR' : language === 'ca' ? 'RÀNQUING' : 'RANKINGS'}
+            </div>
+            {/* Subtle light effect */}
+            <div className="absolute top-0 right-0 w-16 h-16 bg-cyan-500/10 rounded-full blur-xl pointer-events-none" />
+            <div className="absolute top-0 right-0 h-full w-0 bg-cyan-500 group-hover:w-1.5 transition-all"></div>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
           {/* Custom Garage & Shop Button with glowing amber aesthetics */}
           <button
             onClick={() => {
@@ -350,7 +617,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             className="group relative bg-zinc-950 border border-zinc-850 hover:border-amber-500/50 text-zinc-300 hover:text-white p-3 overflow-hidden transition-all active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-1 font-bold text-[10px] uppercase tracking-wider font-mono shadow-[0_4px_20px_rgba(245,158,11,0.02)] rounded-xl"
           >
             <Sparkles className="w-4 h-4 text-amber-400 group-hover:text-amber-300 group-hover:animate-spin" />
-            <span className="relative z-10 leading-none">Garage Shop</span>
+            <span className="relative z-10 leading-none">{language === 'es' ? 'Garaje Tienda' : language === 'ca' ? 'Gatge Botiga' : 'Garage Shop'}</span>
             <span className="bg-amber-500/10 border border-amber-500/25 text-amber-400 px-1 py-0.5 rounded text-[7px] font-mono shrink-0 mt-0.5 leading-none">
               {coins}¢
             </span>
@@ -365,13 +632,13 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             className="group relative bg-zinc-950 border border-zinc-850 hover:border-violet-500/50 text-zinc-300 hover:text-white p-3 overflow-hidden transition-all active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-1 font-bold text-[10px] uppercase tracking-wider font-mono rounded-xl"
           >
             <Film className="w-4 h-4 text-violet-400 group-hover:text-violet-300 transition-all" />
-            <span className="relative z-10 leading-none">Replays</span>
+            <span className="relative z-10 leading-none">{language === 'es' ? 'Repeticiones' : language === 'ca' ? 'Repeticions' : 'Replays'}</span>
             {savedReplays.length > 0 ? (
               <span className="bg-violet-500 text-white font-mono text-[7px] font-black px-1 rounded-full shadow-[0_0_8px_rgba(139,92,246,0.6)] shrink-0 mt-0.5 leading-none">
-                {savedReplays.length} files
+                {savedReplays.length} {language === 'es' ? 'archivos' : language === 'ca' ? 'arxius' : 'files'}
               </span>
             ) : (
-              <span className="text-[7px] text-zinc-600 font-mono shrink-0 mt-0.5 leading-none">Empty</span>
+              <span className="text-[7px] text-zinc-600 font-mono shrink-0 mt-0.5 leading-none">{language === 'es' ? 'Vacío' : language === 'ca' ? 'Buit' : 'Empty'}</span>
             )}
           </button>
 
@@ -384,17 +651,40 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             className="group relative bg-zinc-950 border border-zinc-850 hover:border-blue-500/50 text-zinc-300 hover:text-white p-3 overflow-hidden transition-all active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-1 font-bold text-[10px] uppercase tracking-wider font-mono rounded-xl"
           >
             <Keyboard className="w-4 h-4 text-blue-400 group-hover:animate-bounce" />
-            <span className="relative z-10 leading-none">Instructions</span>
-            <span className="text-[7px] text-zinc-500 font-mono shrink-0 mt-0.5 leading-none">How to play</span>
+            <span className="relative z-10 leading-none">{language === 'es' ? 'Instrucciones' : language === 'ca' ? 'Instruccions' : 'Instructions'}</span>
+            <span className="text-[7px] text-zinc-500 font-mono shrink-0 mt-0.5 leading-none">{language === 'es' ? 'Cómo jugar' : language === 'ca' ? 'Com jugar' : 'How to play'}</span>
+          </button>
+
+          {/* New Settings Button */}
+          <button
+            onClick={() => {
+              sounds.playCountdownBeep(true);
+              onOpenSettings();
+            }}
+            className="group relative bg-zinc-950 border border-zinc-850 hover:border-cyan-500/50 text-zinc-300 hover:text-white p-3 overflow-hidden transition-all active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-1 font-bold text-[10px] uppercase tracking-wider font-mono rounded-xl"
+          >
+            <Settings className="w-4 h-4 text-cyan-400 group-hover:animate-spin" />
+            <span className="relative z-10 leading-none">{language === 'es' ? 'Ajustes' : language === 'ca' ? 'Ajusts' : 'Settings'}</span>
+            <span className="text-[7px] text-zinc-500 font-mono shrink-0 mt-0.5 leading-none">{language === 'es' ? 'Personalizar' : language === 'ca' ? 'Personalitzar' : 'Customize'}</span>
           </button>
         </div>
 
         {/* Stadium Arena Choice list panel */}
         <div className="w-full bg-black/30 border border-white/5 rounded-2xl p-4 backdrop-blur-md flex flex-col gap-3 mt-1 text-left">
-          <span className="font-mono text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none">CHOOSE ARENA PITCH</span>
+          <span className="font-mono text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none">
+            {language === 'es' ? 'SELECCIONAR ESTADIO DE ARENA' : language === 'ca' ? 'SELECCIONAR ESTADI DEL CAMP' : 'CHOOSE ARENA PITCH'}
+          </span>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-2 w-full">
             {STADIUMS.map((stadium) => {
               const active = selectedStadium === stadium.id;
+              // Localize preset names where applicable
+              let localizedStadName = stadium.name;
+              if (stadium.id === 'rustlands') localizedStadName = t.stadRustlands;
+              if (stadium.id === 'cyber') localizedStadName = t.stadCyber;
+              if (stadium.id === 'frozen') localizedStadName = t.stadFrozen;
+              if (stadium.id === 'tokyo') localizedStadName = t.stadTokyo;
+              if (stadium.id === 'cosmic') localizedStadName = t.stadCosmic;
+
               return (
                 <button
                   key={stadium.id}
@@ -414,7 +704,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
                   </div>
                   
                   <div className="px-1.5 pb-1">
-                    <span className="text-[9px] font-black uppercase italic tracking-wide block leading-none truncate">{stadium.name}</span>
+                    <span className="text-[9px] font-black uppercase italic tracking-wide block leading-none truncate">{localizedStadName}</span>
                     <span className="text-[7px] text-zinc-500 block font-mono mt-1 uppercase leading-none">{stadium.ambientVibe} Vibe</span>
                   </div>
                   {active && <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]" />}
@@ -426,7 +716,9 @@ export const MainMenu: React.FC<MainMenuProps> = ({
 
         {/* Practice Drills & Sandbox Gym */}
         <div className="w-full bg-black/30 border border-white/5 rounded-2xl p-4 backdrop-blur-md flex flex-col gap-3 mt-1 text-left">
-          <span className="font-mono text-[9px] font-bold text-emerald-400 uppercase tracking-widest leading-none">⚽ DRILLS & PRACTICE GYM</span>
+          <span className="font-mono text-[9px] font-bold text-emerald-400 uppercase tracking-widest leading-none">
+            ⚽ {language === 'es' ? 'CAMPOS DE ENTRENAMIENTO' : language === 'ca' ? 'CAMPS D\'ENTRENAMENT' : 'DRILLS & PRACTICE GYM'}
+          </span>
           <div className="grid grid-cols-2 gap-3.5 w-full">
             <button
               onClick={() => {
@@ -436,9 +728,15 @@ export const MainMenu: React.FC<MainMenuProps> = ({
               className="group relative bg-[#020202] border border-zinc-800 hover:border-emerald-500/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between rounded-xl"
             >
               <div className="flex flex-col items-start text-left z-10">
-                <span className="font-mono text-[8px] font-bold text-emerald-400 uppercase tracking-widest leading-none mb-1">FREE PRACTICE</span>
-                <span className="font-black uppercase italic tracking-wide text-xs leading-none text-white group-hover:text-emerald-400">SANDBOX TRAINING</span>
-                <p className="text-[8.5px] text-zinc-500 font-medium mt-1 leading-none">Drive and strike ball without defenders</p>
+                <span className="font-mono text-[8px] font-bold text-emerald-400 uppercase tracking-widest leading-none mb-1">
+                  {language === 'es' ? 'ENTRENAMIENTO Llibre' : language === 'ca' ? 'PRÀCTICA LLIURE' : 'FREE PRACTICE'}
+                </span>
+                <span className="font-black uppercase italic tracking-wide text-xs leading-none text-white group-hover:text-emerald-400">
+                  {language === 'es' ? 'PRÁCTICA LIBRE' : language === 'ca' ? 'PRÀCTICA LLIURE' : 'SANDBOX TRAINING'}
+                </span>
+                <p className="text-[8.5px] text-zinc-500 font-medium mt-1 leading-none">
+                  {language === 'es' ? 'Conduce y patea el balón sin defensores' : language === 'ca' ? 'Condueix i colpeja la pilota sense oposició' : 'Drive and strike ball without defenders'}
+                </p>
               </div>
               <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-emerald-500/50 flex items-center justify-center shrink-0">
                 <Play className="w-3 h-3 text-emerald-400" />
@@ -453,9 +751,15 @@ export const MainMenu: React.FC<MainMenuProps> = ({
               className="group relative bg-[#020202] border border-zinc-800 hover:border-amber-500/50 text-white p-4 overflow-hidden transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-between rounded-xl"
             >
               <div className="flex flex-col items-start text-left z-10">
-                <span className="font-mono text-[8px] font-bold text-amber-500 uppercase tracking-widest leading-none mb-1">DEFENSE & PASS MACHINE</span>
-                <span className="font-black uppercase italic tracking-wide text-xs leading-none text-white group-hover:text-amber-400">AUTOMATIC LAUNCHER</span>
-                <p className="text-[8.5px] text-zinc-500 font-medium mt-1 leading-none">Deflect and intercept balls fired by launcher</p>
+                <span className="font-mono text-[8px] font-bold text-amber-500 uppercase tracking-widest leading-none mb-1">
+                  {language === 'es' ? 'LANZADOR DE BALONES' : language === 'ca' ? 'LLANÇADOR DE PILOTES' : 'DEFENSE & PASS MACHINE'}
+                </span>
+                <span className="font-black uppercase italic tracking-wide text-xs leading-none text-white group-hover:text-amber-400">
+                  {language === 'es' ? 'MÁNAGER DE CHUTES' : language === 'ca' ? 'MÀNAGER DE SUT' : 'AUTOMATIC LAUNCHER'}
+                </span>
+                <p className="text-[8.5px] text-zinc-500 font-medium mt-1 leading-none">
+                  {language === 'es' ? 'Intercepta disparos del lanzador automático' : language === 'ca' ? 'Rebutja les pilotes xutades de forma automàtica' : 'Deflect and intercept balls fired by launcher'}
+                </p>
               </div>
               <div className="relative z-10 w-7 h-7 rounded-full border border-zinc-800 group-hover:border-amber-500/50 flex items-center justify-center shrink-0">
                 <Zap className="w-3 h-3 text-amber-400 animate-pulse" />
@@ -510,6 +814,8 @@ export const MainMenu: React.FC<MainMenuProps> = ({
         onBuyPalette={onBuyPalette}
         unlockedDecals={unlockedDecals}
         onBuyDecal={onBuyDecal}
+        unlockedWheels={unlockedWheels}
+        onBuyWheel={onBuyWheel}
       />
 
       {/* DRIVING & ABILITY INSTRUCTIONS OVERLAY */}
@@ -562,7 +868,14 @@ export const MainMenu: React.FC<MainMenuProps> = ({
               </div>
 
               {/* Rarity and Passive abilities description list */}
-              <div className="border-t border-zinc-900 pt-5 space-y-3">
+              <div className="border-t border-zinc-900 pt-5 space-y-4">
+                <div className="bg-zinc-900/10 border border-zinc-900 p-3 rounded-xl mb-4">
+                  <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest font-mono block mb-1">NEW: SPEED-ALTERING ALLOYS & GRAPHICS</span>
+                  <p className="text-zinc-400 text-[10.5px] leading-relaxed">
+                    Custom alloy wheels now alter your vehicle's baseline speed dynamically! Level up with higher-tier wheels like the <strong>Singularity Drive (+30% Speed)</strong>. Add premium vinyl decals on top of custom color paints to give your rocket rig a distinct look on the pitch. Keep an eye on store pricing, sorted from most affordable upward!
+                  </p>
+                </div>
+
                 <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono">CHASSIS PASSIVE COMBAT ABILITIES</span>
                 <div className="space-y-2 text-[11px] leading-relaxed">
                   <div className="bg-zinc-900/30 border border-zinc-850 p-2.5 rounded-lg">

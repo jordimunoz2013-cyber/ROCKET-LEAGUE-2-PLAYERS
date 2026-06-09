@@ -157,7 +157,7 @@ export const ReplayTheatre: React.FC<ReplayTheatreProps> = ({
           {/* Modal Footer */}
           <div className="p-4 border-t border-zinc-800/80 bg-zinc-950 flex justify-between items-center text-[10px] text-zinc-500 font-mono uppercase tracking-widest px-6 relative z-10">
             <span>Standard storage capability: up to 10 replays</span>
-            <span className="text-zinc-600">Rocket League 2 Players</span>
+            <span className="text-zinc-600">Rocket Cars</span>
           </div>
 
         </motion.div>

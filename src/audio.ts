@@ -4,9 +4,23 @@ class SoundEngine {
   private ctx: AudioContext | null = null;
   private masterVolume: GainNode | null = null;
   private muted: boolean = false;
+  private mVol: number = 0.5;
+  private sVol: number = 0.7;
 
   constructor() {
     // Lazy initialisation to support browser gesture Policies
+  }
+
+  public setMusicVolume(vol: number) {
+    this.mVol = vol;
+  }
+
+  public setSfxVolume(vol: number) {
+    this.sVol = vol;
+    if (this.masterVolume && this.ctx && !this.muted) {
+      // Scale master gain based on SFX setting
+      this.masterVolume.gain.setValueAtTime(vol * 0.45, this.ctx.currentTime);
+    }
   }
 
   private init() {
@@ -15,7 +29,7 @@ class SoundEngine {
       const AudioCtxClass = window.AudioContext || (window as any).webkitAudioContext;
       this.ctx = new AudioCtxClass();
       this.masterVolume = this.ctx.createGain();
-      this.masterVolume.gain.setValueAtTime(0.35, this.ctx.currentTime);
+      this.masterVolume.gain.setValueAtTime(this.sVol * 0.45, this.ctx.currentTime);
       this.masterVolume.connect(this.ctx.destination);
     } catch (e) {
       console.warn("Web Audio API not supported", e);

@@ -42,9 +42,17 @@ export interface CarState {
   colorSecondary: string;
   carModel?: string;
   decal?: 'none' | 'stripes' | 'flames' | 'lightning' | 'tech_grid' | 'stars' | 'carbon' | 'honeycomb' | 'waves' | 'vortex' | 'gold_leaf' | 'cyber_circuit';
+  wheels?: string;
   stuckFrames?: number;
   escapeTimer?: number;
   escapeDir?: 'left' | 'right';
+  role?: 'striker' | 'defender' | 'hybrid' | 'goalkeeper';
+  aggression?: number;
+  riskLevel?: number;
+  boostPriority?: number;
+  rotationStrictness?: number;
+  playerName?: string;
+  team?: 'blue' | 'red';
 }
 
 export interface BoostPad {
@@ -71,8 +79,8 @@ export type GamePhase = 'MENU' | 'COUNTDOWN' | 'PLAYING' | 'GOAL_SCORD' | 'GAME_
 
 export interface ReplayFrame {
   ball: { x: number; y: number; vx: number; vy: number };
-  blue: { x: number; y: number; vx: number; vy: number; angle: number; isBoosting: boolean; carModel?: string; colorPrimary?: string; colorSecondary?: string; decal?: string };
-  red: { x: number; y: number; vx: number; vy: number; angle: number; isBoosting: boolean; carModel?: string; colorPrimary?: string; colorSecondary?: string; decal?: string };
+  blue: { x: number; y: number; vx: number; vy: number; angle: number; isBoosting: boolean; carModel?: string; colorPrimary?: string; colorSecondary?: string; decal?: string; wheels?: string };
+  red: { x: number; y: number; vx: number; vy: number; angle: number; isBoosting: boolean; carModel?: string; colorPrimary?: string; colorSecondary?: string; decal?: string; wheels?: string };
   boostPadsActive: boolean[]; // active state of the 6 pads
   scores: { blue: number; red: number };
 }
@@ -95,6 +103,6 @@ export interface SavedReplay {
   events: ReplayEvent[];
 }
 
-export type GameMode = 'same_laptop' | 'vs_bot' | 'bot_vs_bot' | 'free_practice' | 'machine_practice';
+export type GameMode = 'same_laptop' | 'vs_bot' | 'bot_vs_bot' | 'free_practice' | 'machine_practice' | 'career';
 
 

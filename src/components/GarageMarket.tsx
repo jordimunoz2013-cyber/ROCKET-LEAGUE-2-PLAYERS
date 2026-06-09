@@ -31,7 +31,7 @@ export const MARKET_ITEMS: MarketItem[] = [
     id: 'beast',
     name: 'The Beast',
     description: 'A heavy armored chassis featuring dual reinforce bumpers and solid square wheels. Brutal ram force.',
-    price: 250,
+    price: 25,
     stats: { speed: 4, handling: 3, weight: 5 },
     svgPath: 'M 10 20 L 70 20 L 70 40 L 10 40 Z',
     imageSrc: '/src/assets/images/car_beast_1780657747389.png',
@@ -41,7 +41,7 @@ export const MARKET_ITEMS: MarketItem[] = [
     id: 'spectre',
     name: 'Spectre F1',
     description: 'Formula-class streamline bullet with advanced rear stabilizing wings and swept air-intakes.',
-    price: 500,
+    price: 100,
     stats: { speed: 5, handling: 5, weight: 2 },
     svgPath: 'M 10 30 L 45 10 L 60 10 L 80 30 L 60 50 L 45 50 Z',
     imageSrc: '/src/assets/images/car_spectre_1780657762621.png',
@@ -51,7 +51,7 @@ export const MARKET_ITEMS: MarketItem[] = [
     id: 'cyber',
     name: 'Cyberspace',
     description: 'Brutalist exoskeleton racer. Fitted with wrap-around lightbars and composite solar polymer frame.',
-    price: 800,
+    price: 250,
     stats: { speed: 5, handling: 4, weight: 3 },
     svgPath: 'M 10 20 L 40 10 L 80 30 L 40 50 Z',
     imageSrc: '/src/assets/images/car_cyber_1780657774963.png',
@@ -61,87 +61,97 @@ export const MARKET_ITEMS: MarketItem[] = [
     id: 'phantom',
     name: 'Phantom GT',
     description: 'Quantum advanced stealth model. Features translucent active nanotech stabilizer wings and neon underglow outline layers for ultimate aerodynamic slip.',
-    price: 1200,
+    price: 400,
     stats: { speed: 5, handling: 5, weight: 4 },
     svgPath: 'M 10 30 L 30 15 L 75 25 L 85 45 Z',
     imageSrc: '/src/assets/images/car_phantom.png',
     rarity: 'Legendary'
   },
   {
-    id: 'centurion',
-    name: 'Centurion GT-X',
-    description: 'Premium heavy titanium-alloy sports muscle machine equipped with high-airflow turbine scoops.',
-    price: 2500,
-    stats: { speed: 5, handling: 5, weight: 4 },
-    svgPath: 'M 15 25 L 45 15 L 75 15 L 85 30 L 75 45 Z',
-    imageSrc: 'https://picsum.photos/seed/centurion/400/400',
-    rarity: 'Legendary'
-  },
-  {
-    id: 'phoenix',
-    name: 'Phoenix VTOL',
-    description: 'Ultra-class atmospheric hybrid jetcar. Configured with standard delta wing configuration and gold sweeping high-temp solar thermal accents.',
-    price: 2000,
-    stats: { speed: 5, handling: 5, weight: 5 },
-    svgPath: 'M 10 15 L 50 10 L 85 45 Z',
-    imageSrc: '/src/assets/images/car_phoenix.png',
-    rarity: 'UltraLegendary'
-  },
-  {
     id: 'apex',
     name: 'Apex Interceptor',
     description: 'A heavy racing interceptor muscle chassis equipped with carbon wings and solid frame reinforcement.',
-    price: 1800,
+    price: 600,
     stats: { speed: 5, handling: 4, weight: 4 },
     svgPath: 'M 15 20 L 75 25 L 85 50 L 75 75 Z',
     imageSrc: 'https://picsum.photos/seed/apex/400/400',
     rarity: 'Epic'
   },
   {
+    id: 'phoenix',
+    name: 'Phoenix VTOL',
+    description: 'Ultra-class atmospheric hybrid jetcar. Configured with standard delta wing configuration and gold sweeping high-temp solar thermal accents.',
+    price: 800,
+    stats: { speed: 5, handling: 5, weight: 5 },
+    svgPath: 'M 10 15 L 50 10 L 85 45 Z',
+    imageSrc: '/src/assets/images/car_phoenix.png',
+    rarity: 'UltraLegendary'
+  },
+  {
+    id: 'centurion',
+    name: 'Centurion GT-X',
+    description: 'Premium heavy titanium-alloy sports muscle machine equipped with high-airflow turbine scoops.',
+    price: 1000,
+    stats: { speed: 5, handling: 5, weight: 4 },
+    svgPath: 'M 15 25 L 45 15 L 75 15 L 85 30 L 75 45 Z',
+    imageSrc: 'https://picsum.photos/seed/centurion/400/400',
+    rarity: 'Legendary'
+  },
+  {
     id: 'glacier',
     name: 'Glacier Wolf',
     description: 'Icy tundra racing speedster constructed with hyper-conductive frost alloys and bladed fenders.',
-    price: 2800,
+    price: 1050,
     stats: { speed: 5, handling: 5, weight: 3 },
     svgPath: 'M 20 15 L 60 10 L 90 45 Z',
     imageSrc: 'https://picsum.photos/seed/glacier/400/400',
     rarity: 'Legendary'
   },
   {
-    id: 'reaper',
-    name: 'Grim Reaper',
-    description: 'Stealthy nightshade drift beast with carbon-composite sickle spoilers and ominous halogen underglow.',
-    price: 4000,
-    stats: { speed: 5, handling: 5, weight: 4 },
-    svgPath: 'M 10 25 L 90 25 L 50 50 Z',
-    imageSrc: 'https://picsum.photos/seed/reaper/400/400',
-    rarity: 'Secret'
-  },
-  {
     id: 'void',
     name: 'Infinity Void',
     description: 'Extraterrestrial dark matter racer. Emits an absolute gravity pull on collision, shifting spatial coordinate vectors.',
-    price: 3500,
+    price: 1250,
     stats: { speed: 5, handling: 5, weight: 5 },
     svgPath: 'M 10 30 L 50 10 L 90 30 L 50 50 Z',
     imageSrc: '/src/assets/images/car_void.png',
     rarity: 'Secret'
   },
   {
-    id: 'spectre',
+    id: 'reaper',
+    name: 'Grim Reaper',
+    description: 'Stealthy nightshade drift beast with carbon-composite sickle spoilers and ominous halogen underglow.',
+    price: 1500,
+    stats: { speed: 5, handling: 5, weight: 4 },
+    svgPath: 'M 10 25 L 90 25 L 50 50 Z',
+    imageSrc: 'https://picsum.photos/seed/reaper/400/400',
+    rarity: 'Secret'
+  },
+  {
+    id: 'spectre_electro',
     name: 'Spectre Electro',
     description: 'High-voltage pulse supercar. Engineered with dual lightning capacitors, lightning wings, and a hyper-magnetic battery frame.',
-    price: 5000,
+    price: 1750,
     stats: { speed: 5, handling: 5, weight: 4 },
     svgPath: 'M 15 20 L 50 12 L 85 20 L 65 35 L 35 35 Z',
     imageSrc: 'https://picsum.photos/seed/spectre/400/400',
     rarity: 'Mythic'
   },
   {
+    id: 'nemesis',
+    name: 'Nemesis GTS',
+    description: 'A dark matter spectral interceptor engineered with active violet light manifolds, heavy thruster exhaust, and space-grade carbon fiber body paneling.',
+    price: 2000,
+    stats: { speed: 5, handling: 5, weight: 4 },
+    svgPath: 'M 10 32 L 60 10 L 90 32 L 60 54 Z',
+    imageSrc: 'https://picsum.photos/seed/nemesis/400/400',
+    rarity: 'UltraLegendary'
+  },
+  {
     id: 'classified',
     name: 'Classified X',
     description: 'An ultra-premium hyper-grade experimental rocket prototype. Boasts maximum propulsion output, reactive aerospace wings and adaptive quantum energy exhaust.',
-    price: 15000,
+    price: 5000,
     stats: { speed: 5, handling: 5, weight: 5 },
     svgPath: 'M 10 30 L 50 5 L 90 30 L 50 55 Z',
     imageSrc: '/src/assets/images/secret_car_1780745475353.png',
@@ -152,16 +162,17 @@ export const MARKET_ITEMS: MarketItem[] = [
 export const SHARED_PALETTES: CarPalette[] = [
   { name: 'Cobalt Classic', primary: '#3b82f6', secondary: '#60a5fa', price: 0, rarity: 'Special' },
   { name: 'Crimson Fury', primary: '#ef4444', secondary: '#fb923c', price: 0, rarity: 'Special' },
-  { name: 'Cyber Jade', primary: '#10b981', secondary: '#6ee7b7', price: 150, rarity: 'Rare' },
-  { name: 'Volcanic Gold', primary: '#b91c1c', secondary: '#facc15', price: 150, rarity: 'Rare' },
-  { name: 'Plasma Violet', primary: '#8b5cf6', secondary: '#f472b6', price: 300, rarity: 'Epic' },
-  { name: 'Sunset Hot Coral', primary: '#f43f5e', secondary: '#fda4af', price: 300, rarity: 'Epic' },
-  { name: 'Neon Spectre', primary: '#4f46e5', secondary: '#a78bfa', price: 500, rarity: 'Mythic' },
-  { name: 'Cosmic Overlord', primary: '#1e1b4b', secondary: '#a855f7', price: 800, rarity: 'Legendary' },
-  { name: 'Singularity Gold', primary: '#1d4ed8', secondary: '#eab308', price: 1200, rarity: 'UltraLegendary' },
-  { name: 'Valkyrie Cyan', primary: '#06b6d4', secondary: '#f8fafc', price: 1100, rarity: 'Epic' },
-  { name: 'Cyberpunk Cyber', primary: '#f63be6', secondary: '#00ffff', price: 1500, rarity: 'Secret' },
-  { name: 'Abyssal Shadow', primary: '#020617', secondary: '#38bdf8', price: 2000, rarity: 'Secret' }
+  { name: 'Cyber Jade', primary: '#10b981', secondary: '#6ee7b7', price: 100, rarity: 'Rare' },
+  { name: 'Volcanic Gold', primary: '#b91c1c', secondary: '#facc15', price: 250, rarity: 'Rare' },
+  { name: 'Plasma Violet', primary: '#8b5cf6', secondary: '#f472b6', price: 500, rarity: 'Epic' },
+  { name: 'Sunset Hot Coral', primary: '#f43f5e', secondary: '#fda4af', price: 750, rarity: 'Epic' },
+  { name: 'Neon Spectre', primary: '#4f46e5', secondary: '#a78bfa', price: 1000, rarity: 'Mythic' },
+  { name: 'Cosmic Overlord', primary: '#1e1b4b', secondary: '#a855f7', price: 1250, rarity: 'Legendary' },
+  { name: 'Valkyrie Cyan', primary: '#06b6d4', secondary: '#f8fafc', price: 1500, rarity: 'Epic' },
+  { name: 'Singularity Gold', primary: '#1d4ed8', secondary: '#eab308', price: 1750, rarity: 'UltraLegendary' },
+  { name: 'Cyberpunk Cyber', primary: '#f63be6', secondary: '#00ffff', price: 2000, rarity: 'Secret' },
+  { name: 'Abyssal Shadow', primary: '#020617', secondary: '#38bdf8', price: 2250, rarity: 'Secret' },
+  { name: 'Stellar Flare', primary: '#f97316', secondary: '#ec4899', price: 2500, rarity: 'Secret' }
 ];
 
 export const BLUE_PALETTES: CarPalette[] = SHARED_PALETTES;
@@ -188,14 +199,39 @@ export const getRarityStyles = (rarity: string) => {
   }
 };
 
-export const renderCardVehiclePreview = (itemId: string, primaryColor: string = '#f59e0b', secondaryColor: string = '#fb7185', decal: string = 'none') => {
+export const renderCardVehiclePreview = (
+  itemId: string,
+  primaryColor: string = '#f59e0b',
+  secondaryColor: string = '#fb7185',
+  decal: string = 'none',
+  wheelId: string = 'classic'
+) => {
+  const wheelTheme = {
+    classic: { color: '#1e293b', rim: '#475569' },
+    cyber: { color: '#090d16', rim: '#00ffff' },
+    magma: { color: '#1a0902', rim: '#f97316' },
+    frost: { color: '#051821', rim: '#38bdf8' },
+    gold_star: { color: '#1f1601', rim: '#fbbf24' },
+    classified_drive: { color: '#16021f', rim: '#d946ef' },
+  }[wheelId] || { color: '#1e293b', rim: '#475569' };
+
+  const renderSvgWheel = (x: number, y: number) => (
+    <g>
+      <rect x={x} y={y} width="12" height="6" rx="1.5" fill={wheelTheme.color} stroke="#090d16" strokeWidth="0.5" />
+      <rect x={x + 2} y={y + 1} width="8" height="4" rx="1" fill={wheelTheme.rim} />
+      {wheelId !== 'classic' && (
+        <circle cx={x + 6} cy={y + 3} r="0.8" fill="#ffffff" />
+      )}
+    </g>
+  );
+
   return (
     <svg className="w-24 h-24 drop-shadow-[0_0_15px_rgba(245,158,11,0.25)] transform rotate-90" viewBox="0 0 100 100">
       {/* Wheels */}
-      <rect x="25" y="15" width="12" height="6" rx="1.5" fill="#0f171a" />
-      <rect x="63" y="15" width="12" height="6" rx="1.5" fill="#0f171a" />
-      <rect x="25" y="79" width="12" height="6" rx="1.5" fill="#0f171a" />
-      <rect x="63" y="79" width="12" height="6" rx="1.5" fill="#0f171a" />
+      {renderSvgWheel(25, 15)}
+      {renderSvgWheel(63, 15)}
+      {renderSvgWheel(25, 79)}
+      {renderSvgWheel(63, 79)}
 
       {/* Chassis body outline depends on model */}
       {itemId === 'beast' ? (
@@ -278,7 +314,7 @@ export const renderCardVehiclePreview = (itemId: string, primaryColor: string = 
           <ellipse cx="52" cy="50" rx="14" ry="18" fill="#1e293b" stroke={secondaryColor} strokeWidth="2" />
           <polygon points="26,30 36,20 32,50 36,80 26,70" fill="#0f171a" stroke={primaryColor} strokeWidth="1" />
         </>
-      ) : itemId === 'spectre' ? (
+      ) : itemId === 'spectre_electro' ? (
         <>
           {/* Spectre Electro - high voltage supercar */}
           <path d="M 20 28 L 35 18 L 65 18 L 84 50 L 65 82 L 35 82 L 20 72 Z" fill={primaryColor} stroke="#eab308" strokeWidth="2.5" />
@@ -392,20 +428,63 @@ export const renderCardVehiclePreview = (itemId: string, primaryColor: string = 
   );
 };
 
+export const renderSingleWheelSVG = (wheelId: string) => {
+  const wheelTheme = {
+    classic: { color: '#1e293b', rim: '#475569' },
+    cyber: { color: '#090d16', rim: '#00ffff' },
+    magma: { color: '#1a0902', rim: '#f97316' },
+    frost: { color: '#051821', rim: '#38bdf8' },
+    gold_star: { color: '#1f1601', rim: '#fbbf24' },
+    classified_drive: { color: '#16021f', rim: '#d946ef' },
+  }[wheelId] || { color: '#1e293b', rim: '#475569' };
+
+  return (
+    <svg className="w-9 h-6 filter drop-shadow-[0_0_3px_rgba(255,255,255,0.15)]" viewBox="0 0 24 16">
+      <rect x="2" y="2" width="20" height="12" rx="3" fill={wheelTheme.color} stroke="#090d16" strokeWidth="1" />
+      <rect x="6" y="4" width="12" height="8" rx="1.5" fill={wheelTheme.rim} />
+      {wheelId !== 'classic' && (
+        <circle cx="12" cy="8" r="1.5" fill="#ffffff" />
+      )}
+    </svg>
+  );
+};
+
+export interface PlayableWheel {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  speedBonus: number;
+  color: string;
+  rimColor: string;
+  rarity: 'Special' | 'Rare' | 'Epic' | 'Mythic' | 'Legendary' | 'UltraLegendary' | 'Secret';
+}
+
+export const MARKET_WHEELS: PlayableWheel[] = [
+  { id: 'classic', name: 'Classic Obsidian', description: 'Standard durable tires with heavy iron rims (+0% Speed).', price: 0, speedBonus: 0, color: '#475569', rimColor: '#475569', rarity: 'Special' },
+  { id: 'cyber', name: 'Cyber Neon', description: 'Sleek neon tires emitting cyan core telemetry signals (+5% Speed).', price: 250, speedBonus: 5, color: '#00ffff', rimColor: '#00ffff', rarity: 'Rare' },
+  { id: 'magma', name: 'Magma Fusion', description: 'Treads forged from liquid sulfur pulsing with molten core thermal heat (+10% Speed).', price: 500, speedBonus: 10, color: '#f97316', rimColor: '#f97316', rarity: 'Epic' },
+  { id: 'frost', name: 'Frost Overdrive', description: 'Deep cryo studs optimized for low-friction ice sector drifting (+15% Speed).', price: 750, speedBonus: 15, color: '#38bdf8', rimColor: '#38bdf8', rarity: 'Legendary' },
+  { id: 'gold_star', name: 'Stellar Gold', description: 'Chromed golden spin rims reserved for star champions (+22% Speed).', price: 1000, speedBonus: 22, color: '#fbbf24', rimColor: '#fbbf24', rarity: 'UltraLegendary' },
+  { id: 'classified_drive', name: 'Singularity Drive', description: 'Quantum spacetime warping experimental drive wheels (+30% Speed).', price: 1500, speedBonus: 30, color: '#d946ef', rimColor: '#d946ef', rarity: 'Secret' },
+];
+
 interface GarageMarketProps {
   isOpen: boolean;
   onClose: () => void;
   coins: number;
   onBuyCar: (modelId: string, price: number) => void;
   unlockedModels: string[];
-  blueConfig: { model: string; primary: string; secondary: string; decal?: string };
-  redConfig: { model: string; primary: string; secondary: string; decal?: string };
-  onUpdateBlueConfig: (config: { model: string; primary: string; secondary: string; decal?: string }) => void;
-  onUpdateRedConfig: (config: { model: string; primary: string; secondary: string; decal?: string }) => void;
+  blueConfig: { model: string; primary: string; secondary: string; decal?: string; wheels?: string };
+  redConfig: { model: string; primary: string; secondary: string; decal?: string; wheels?: string };
+  onUpdateBlueConfig: (config: { model: string; primary: string; secondary: string; decal?: string; wheels?: string }) => void;
+  onUpdateRedConfig: (config: { model: string; primary: string; secondary: string; decal?: string; wheels?: string }) => void;
   unlockedPalettes: string[];
   onBuyPalette: (paletteName: string, price: number) => void;
   unlockedDecals: string[];
   onBuyDecal: (decalId: string, price: number) => void;
+  unlockedWheels: string[];
+  onBuyWheel: (wheelId: string, price: number) => void;
 }
 
 export const GarageMarket: React.FC<GarageMarketProps> = ({
@@ -422,6 +501,8 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
   onBuyPalette,
   unlockedDecals,
   onBuyDecal,
+  unlockedWheels,
+  onBuyWheel,
 }) => {
   const [activeTab, setActiveTab] = useState<'garage' | 'market'>('garage');
   const [purchaseSuccess, setPurchaseSuccess] = useState<string | null>(null);
@@ -509,6 +590,30 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
         onBuyDecal(item.id, item.price);
         updateFn({ ...config, decal: item.id });
         setPurchaseSuccess(`✓ UNLOCKED PREMIUM DECAL: ${item.label.toUpperCase()}! Fitted now.`);
+        setTimeout(() => setPurchaseSuccess(null), 4000);
+      }
+    }
+  };
+
+  const handleWheelClick = (item: PlayableWheel, isBlue: boolean) => {
+    const config = isBlue ? blueConfig : redConfig;
+    const updateFn = isBlue ? onUpdateBlueConfig : onUpdateRedConfig;
+    
+    const isUnlocked = item.price === 0 || unlockedWheels.includes(item.id);
+    if (isUnlocked) {
+      sounds.playBoost();
+      updateFn({ ...config, wheels: item.id });
+    } else {
+      // Need to purchase!
+      if (coins < item.price) {
+        sounds.playHit(true);
+        setPurchaseError(`Insufficient currency! You need ${item.price - coins} more gold coins for "${item.name}" wheels.`);
+        setTimeout(() => setPurchaseError(null), 3000);
+      } else {
+        sounds.playWin();
+        onBuyWheel(item.id, item.price);
+        updateFn({ ...config, wheels: item.id });
+        setPurchaseSuccess(`✓ UNLOCKED PREMIUM WHEELS: ${item.name.toUpperCase()}! Fitted now.`);
         setTimeout(() => setPurchaseSuccess(null), 4000);
       }
     }
@@ -628,26 +733,61 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
             
             {/* VIEW A: EQUIP GARAGE */}
             {activeTab === 'garage' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 
-                {/* COLUMN 1 (CHASSIS SELECTION PANEL) - grid-cols-12 span 5 */}
-                <div className="lg:col-span-5 flex flex-col gap-6">
-
-                  {/* SUB-SECTION A: P1 CHASSIS MODEL */}
-                  <div className="bg-blue-950/10 border border-blue-500/20 rounded-2xl p-5 shadow-[0_4px_25px_rgba(59,130,246,0.05)] relative overflow-hidden flex flex-col gap-4">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
-                    
-                    <div className="flex items-center justify-between border-b border-blue-500/10 pb-3">
-                      <span className="text-[10px] font-black tracking-widest text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded-md uppercase font-mono">
-                        P1 BLUE CHASSIS
+                {/* ==========================================
+                    PLAYER 1 (BLUE TEAM) CUSTOMIZATION PANEL
+                    ========================================== */}
+                <div className="bg-gradient-to-b from-blue-950/20 to-zinc-950/5 border border-blue-500/25 rounded-2xl p-5 md:p-6 shadow-[0_8px_40px_rgba(59,130,246,0.08)] relative flex flex-col gap-6">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
+                  
+                  {/* P1 Headers */}
+                  <div className="flex items-center justify-between border-b border-blue-500/15 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6] animate-pulse" />
+                      <span className="text-xs font-black tracking-widest text-blue-400 font-mono uppercase">
+                        PLAYER 1 BLUE CUSTOMIZATION
                       </span>
-                      <span className="text-[9px] text-zinc-500 uppercase font-mono font-bold">W / A / S / D Keys</span>
                     </div>
+                    <span className="text-[8px] text-zinc-500 uppercase font-mono font-bold">W / A / S / D Keys</span>
+                  </div>
 
+                  {/* Body car image placeholder */}
+                  {(() => {
+                    const detail = MARKET_ITEMS.find(item => item.id === blueConfig.model) || {
+                      name: 'Interstellar Default',
+                      imageSrc: '/src/assets/images/car_interstellar.png',
+                      rarity: 'Special' as const,
+                      stats: { speed: 3.5, handling: 4, weight: 3 }
+                    };
+                    return (
+                      <div className="w-full h-36 bg-zinc-950/90 border border-blue-500/10 rounded-xl flex items-center justify-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
+                        <div className="absolute top-2 right-2 text-[8px] text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded font-mono z-20">
+                          {detail.rarity.toUpperCase()}
+                        </div>
+                        <div className="transform scale-[1.3] group-hover:scale-[1.45] transition-all duration-300 z-10 flex items-center justify-center">
+                          {renderCardVehiclePreview(blueConfig.model, blueConfig.primary, blueConfig.secondary, blueConfig.decal, blueConfig.wheels)}
+                        </div>
+                        <div className="absolute bottom-2 inset-x-3 flex items-center justify-between z-20">
+                          <span className="text-[10px] font-black tracking-widest text-zinc-400 uppercase font-mono">
+                            HULL: {detail.name}
+                          </span>
+                          <span className="text-[8.5px] font-mono text-zinc-500">
+                            SPD: {detail.stats.speed}/5 | HND: {detail.stats.handling}/5
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Personalization Options Grid / Stack */}
+                  <div className="space-y-5">
+                    
+                    {/* A. Body Car Hull Choice */}
                     <div className="space-y-2">
-                      <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest font-mono">SELECT BODY</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {/* Render P1 Body Choices */}
+                      <label className="text-[9px] font-black text-blue-400 uppercase tracking-widest font-mono block">A. Body Car (Chassis)</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
                         <button
                           onClick={() => {
                             sounds.playBoost();
@@ -655,16 +795,15 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                           }}
                           className={`p-2.5 rounded-xl border text-left transition-all relative cursor-pointer ${
                             blueConfig.model === 'interstellar'
-                              ? 'bg-blue-500/15 border-blue-500 text-white'
+                              ? 'bg-blue-500/15 border-blue-500 text-white shadow-[0_0_8px_rgba(59,130,246,0.15)]'
                               : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
                           }`}
                         >
-                          <span className="text-[11px] font-black uppercase italic tracking-wide block">Interstellar</span>
-                          <span className="text-[8px] font-bold text-slate-400 uppercase font-mono mt-0.5">Special Chassis</span>
-                          {blueConfig.model === 'interstellar' && <Check className="absolute top-2.5 right-2 w-3.5 h-3.5 text-blue-400" />}
+                          <span className="text-[10px] font-black uppercase italic tracking-wide block">Interstellar</span>
+                          <span className="text-[7.5px] font-bold text-slate-400 uppercase font-mono mt-0.5 block">Special Default</span>
+                          {blueConfig.model === 'interstellar' && <Check className="absolute top-2 right-2 w-3.5 h-3.5 text-blue-400" />}
                         </button>
 
-                        {/* List unlocked models for Blue */}
                         {MARKET_ITEMS.map((item) => {
                           const isUnlocked = unlockedModels.includes(item.id);
                           if (!isUnlocked) {
@@ -674,16 +813,15 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                                 className="p-2.5 rounded-xl border border-zinc-900/80 bg-zinc-950/20 opacity-30 text-left flex items-center justify-between"
                               >
                                 <div>
-                                  <span className="text-[11px] font-black uppercase italic tracking-wide text-zinc-650 block truncate max-w-[100px]">{item.name}</span>
-                                  <span className="text-[7.5px] text-zinc-600 block font-mono uppercase tracking-wider font-extrabold">{item.rarity} locked</span>
+                                  <span className="text-[10px] font-black uppercase italic tracking-wide text-zinc-500 block truncate max-w-[90px]">{item.name}</span>
+                                  <span className="text-[7px] text-zinc-650 block font-mono uppercase tracking-wider font-semibold">{item.rarity}</span>
                                 </div>
-                                <Lock className="w-3 h-3 text-zinc-650" />
+                                <span className="text-[7px] text-zinc-500 font-bold uppercase font-mono">LOCKED</span>
                               </div>
                             );
                           }
 
                           const isSelected = blueConfig.model === item.id;
-                          const rStyles = getRarityStyles(item.rarity);
                           return (
                             <button
                               key={`unlocked-blue-${item.id}`}
@@ -697,31 +835,193 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                                   : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
                               }`}
                             >
-                              <span className="text-[11px] font-black uppercase italic tracking-wide block truncate max-w-[100px]">{item.name}</span>
-                              <span className={`text-[8px] font-bold uppercase font-mono mt-0.5 inline-block ${rStyles.text}`}>{item.rarity}</span>
-                              {isSelected && <Check className="absolute top-2.5 right-2 w-3.5 h-3.5 text-blue-400" />}
+                              <span className="text-[10px] font-black uppercase italic tracking-wide block truncate max-w-[90px]">{item.name}</span>
+                              <span className="text-[7.5px] font-mono text-zinc-500 uppercase mt-0.5 block">{item.rarity}</span>
+                              {isSelected && <Check className="absolute top-2 right-2 w-3.5 h-3.5 text-blue-400" />}
                             </button>
                           );
                         })}
                       </div>
                     </div>
-                  </div>
 
-                  {/* SUB-SECTION B: P2 CHASSIS MODEL */}
-                  <div className="bg-red-950/10 border border-red-500/20 rounded-2xl p-5 shadow-[0_4px_25px_rgba(239,68,68,0.05)] relative overflow-hidden flex flex-col gap-4">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-2xl pointer-events-none" />
-                    
-                    <div className="flex items-center justify-between border-b border-red-500/10 pb-3">
-                      <span className="text-[10px] font-black tracking-widest text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-md uppercase font-mono">
-                        P2 RED CHASSIS
-                      </span>
-                      <span className="text-[9px] text-zinc-500 uppercase font-mono font-bold">Arrow Keys</span>
+                    {/* B. Body Color paint 선택 */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-blue-400 uppercase tracking-widest font-mono block font-mono">B. Body Color Coating</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 tracking-wide custom-scrollbar">
+                        {SHARED_PALETTES.map((pal) => {
+                          const isSelected = blueConfig.primary === pal.primary;
+                          const isUnlocked = pal.price === 0 || unlockedPalettes.includes(pal.name);
+                          const rStyles = getRarityStyles(pal.rarity);
+                          return (
+                            <button
+                              key={`shared-pal-blue-${pal.name}`}
+                              onClick={() => handlePaletteClick(pal, true)}
+                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
+                                isSelected
+                                  ? 'bg-blue-500/15 border-blue-500 text-white shadow-[0_0_8px_rgba(59,130,246,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                              }`}
+                            >
+                              <div className="w-5 h-5 rounded-full flex overflow-hidden border border-white/10 shrink-0 relative">
+                                <span className="w-1/2 h-full" style={{ backgroundColor: pal.primary }} />
+                                <span className="w-1/2 h-full" style={{ backgroundColor: pal.secondary }} />
+                                {!isUnlocked && (
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                                    <Lock className="w-2 h-2 text-blue-400" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{pal.name}</span>
+                                <span className={`text-[6.5px] font-bold block mt-0.5 ${rStyles.text}`}>
+                                  {isUnlocked ? pal.rarity : `${pal.price}¢`}
+                                </span>
+                              </div>
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-blue-400" />}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
+                    {/* C. Vinyl decals 선택 */}
                     <div className="space-y-2">
-                      <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest font-mono">SELECT BODY</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {/* Render P2 Body Choices */}
+                      <label className="text-[9px] font-black text-blue-400 uppercase tracking-widest font-mono block">C. Premium Vinyl Decal</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
+                        {DECAL_ITEMS.map((item) => {
+                          const isSelected = blueConfig.decal === item.id || (!blueConfig.decal && item.id === 'none');
+                          const isUnlocked = item.price === 0 || unlockedDecals.includes(item.id);
+                          return (
+                            <button
+                              key={`shared-decal-blue-${item.id}`}
+                              onClick={() => handleDecalClick(item, true)}
+                              className={`p-1.5 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
+                                isSelected
+                                  ? 'bg-blue-500/15 border-blue-500 text-white shadow-[0_0_8px_rgba(59,130,246,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                              }`}
+                            >
+                              <div className="w-10 h-10 rounded bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 relative overflow-hidden">
+                                <div className="scale-[0.38] transform rotate-90 flex items-center justify-center absolute z-10">
+                                  {renderCardVehiclePreview(blueConfig.model, blueConfig.primary, blueConfig.secondary, item.id, blueConfig.wheels)}
+                                </div>
+                                {!isUnlocked && (
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+                                    <Lock className="w-2.5 h-2.5 text-blue-400" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{item.label}</span>
+                                <span className="text-[6.5px] text-zinc-500 font-mono block mt-0.5">{isUnlocked ? 'DECAL' : `${item.price}¢`}</span>
+                              </div>
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-blue-500" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* D. Performance Alloys 선택 (VARYING SPEED AS REQUESTED) */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-blue-400 uppercase tracking-widest font-mono block">D. Alloy Wheels (Speed Altering)</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
+                        {MARKET_WHEELS.map((item) => {
+                          const isSelected = blueConfig.wheels === item.id || (!blueConfig.wheels && item.id === 'classic');
+                          const isUnlocked = item.price === 0 || unlockedWheels.includes(item.id);
+                          const isBetter = item.speedBonus > 0;
+                          return (
+                            <button
+                              key={`shared-wheels-blue-${item.id}`}
+                              onClick={() => handleWheelClick(item, true)}
+                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
+                                isSelected
+                                  ? 'bg-blue-500/15 border-blue-500 text-white shadow-[0_0_8px_rgba(59,130,246,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                              }`}
+                            >
+                              <div className="w-10 h-7 rounded bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 relative overflow-hidden">
+                                <div className="z-10 flex items-center justify-center">
+                                  {renderSingleWheelSVG(item.id)}
+                                </div>
+                                {!isUnlocked && (
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+                                    <Lock className="w-2.5 h-2.5 text-blue-400" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{item.name}</span>
+                                <span className={`text-[6.5px] font-mono block mt-0.5 font-bold ${isBetter ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                  {isUnlocked 
+                                    ? (isBetter ? `+${item.speedBonus}% SPEED` : 'Classic Base')
+                                    : `${item.price}¢`
+                                  }
+                                </span>
+                              </div>
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-blue-500" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* ==========================================
+                    PLAYER 2 (RED TEAM) CUSTOMIZATION PANEL
+                    ========================================== */}
+                <div className="bg-gradient-to-b from-red-950/20 to-zinc-950/5 border border-red-500/25 rounded-2xl p-5 md:p-6 shadow-[0_8px_40px_rgba(239,68,68,0.08)] relative flex flex-col gap-6">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-2xl pointer-events-none" />
+                  
+                  {/* P1 Headers */}
+                  <div className="flex items-center justify-between border-b border-red-500/15 pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse" />
+                      <span className="text-xs font-black tracking-widest text-red-400 font-mono uppercase">
+                        PLAYER 2 RED CUSTOMIZATION
+                      </span>
+                    </div>
+                    <span className="text-[8px] text-zinc-500 uppercase font-mono font-bold">Arrow Keys</span>
+                  </div>
+
+                  {/* Body car image placeholder */}
+                  {(() => {
+                    const detail = MARKET_ITEMS.find(item => item.id === redConfig.model) || {
+                      name: 'Interstellar Default',
+                      imageSrc: '/src/assets/images/car_interstellar.png',
+                      rarity: 'Special' as const,
+                      stats: { speed: 3.5, handling: 4, weight: 3 }
+                    };
+                    return (
+                      <div className="w-full h-36 bg-zinc-950/90 border border-red-500/10 rounded-xl flex items-center justify-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
+                        <div className="absolute top-2 right-2 text-[8px] text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded font-mono z-20">
+                          {detail.rarity.toUpperCase()}
+                        </div>
+                        <div className="transform scale-[1.3] group-hover:scale-[1.45] transition-all duration-300 z-10 flex items-center justify-center">
+                          {renderCardVehiclePreview(redConfig.model, redConfig.primary, redConfig.secondary, redConfig.decal, redConfig.wheels)}
+                        </div>
+                        <div className="absolute bottom-2 inset-x-3 flex items-center justify-between z-20">
+                          <span className="text-[10px] font-black tracking-widest text-zinc-400 uppercase font-mono">
+                            HULL: {detail.name}
+                          </span>
+                          <span className="text-[8.5px] font-mono text-zinc-500">
+                            SPD: {detail.stats.speed}/5 | HND: {detail.stats.handling}/5
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Personalization Options Grid / Stack */}
+                  <div className="space-y-5">
+                    
+                    {/* A. Body Car Hull Choice */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-red-400 uppercase tracking-widest font-mono block">A. Body Car (Chassis)</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
                         <button
                           onClick={() => {
                             sounds.playBoost();
@@ -729,38 +1029,36 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                           }}
                           className={`p-2.5 rounded-xl border text-left transition-all relative cursor-pointer ${
                             redConfig.model === 'interstellar'
-                              ? 'bg-red-500/15 border-red-500 text-white'
+                              ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_8px_rgba(239,68,68,0.15)]'
                               : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
                           }`}
                         >
-                          <span className="text-[11px] font-black uppercase italic tracking-wide block">Interstellar</span>
-                          <span className="text-[8px] font-bold text-slate-400 uppercase font-mono mt-0.5">Special Chassis</span>
-                          {redConfig.model === 'interstellar' && <Check className="absolute top-2.5 right-2 w-3.5 h-3.5 text-red-400" />}
+                          <span className="text-[10px] font-black uppercase italic tracking-wide block">Interstellar</span>
+                          <span className="text-[7.5px] font-bold text-slate-400 uppercase font-mono mt-0.5 block">Special Default</span>
+                          {redConfig.model === 'interstellar' && <Check className="absolute top-2 right-2 w-3.5 h-3.5 text-red-400" />}
                         </button>
 
-                        {/* List unlocked models for Red */}
                         {MARKET_ITEMS.map((item) => {
                           const isUnlocked = unlockedModels.includes(item.id);
                           if (!isUnlocked) {
                             return (
                               <div
-                                key={`locked-red-${item.id}`}
+                                key={`locked-red-equip-${item.id}`}
                                 className="p-2.5 rounded-xl border border-zinc-900/80 bg-zinc-950/20 opacity-30 text-left flex items-center justify-between"
                               >
                                 <div>
-                                  <span className="text-[11px] font-black uppercase italic tracking-wide text-zinc-650 block truncate max-w-[100px]">{item.name}</span>
-                                  <span className="text-[7.5px] text-zinc-600 block font-mono uppercase tracking-wider font-extrabold">{item.rarity} locked</span>
+                                  <span className="text-[10px] font-black uppercase italic tracking-wide text-zinc-500 block truncate max-w-[90px]">{item.name}</span>
+                                  <span className="text-[7px] text-zinc-650 block font-mono uppercase tracking-wider font-semibold">{item.rarity}</span>
                                 </div>
-                                <Lock className="w-3 h-3 text-zinc-650" />
+                                <span className="text-[7px] text-zinc-500 font-bold uppercase font-mono">LOCKED</span>
                               </div>
                             );
                           }
 
                           const isSelected = redConfig.model === item.id;
-                          const rStyles = getRarityStyles(item.rarity);
                           return (
                             <button
-                              key={`unlocked-red-${item.id}`}
+                              key={`unlocked-red-equip-${item.id}`}
                               onClick={() => {
                                 sounds.playBoost();
                                 onUpdateRedConfig({ ...redConfig, model: item.id });
@@ -771,163 +1069,131 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                                   : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
                               }`}
                             >
-                              <span className="text-[11px] font-black uppercase italic tracking-wide block truncate max-w-[100px]">{item.name}</span>
-                              <span className={`text-[8px] font-bold uppercase font-mono mt-0.5 inline-block ${rStyles.text}`}>{item.rarity}</span>
-                              {isSelected && <Check className="absolute top-2.5 right-2 w-3.5 h-3.5 text-red-400" />}
+                              <span className="text-[10px] font-black uppercase italic tracking-wide block truncate max-w-[90px]">{item.name}</span>
+                              <span className="text-[7.5px] font-mono text-zinc-500 uppercase mt-0.5 block">{item.rarity}</span>
+                              {isSelected && <Check className="absolute top-2 right-2 w-3.5 h-3.5 text-red-400" />}
                             </button>
                           );
                         })}
                       </div>
                     </div>
-                  </div>
 
-                  {/* DUAL VEHICLE PREVIEW HOLOGRAMS */}
-                  <div className="border border-zinc-800 bg-zinc-950/80 rounded-2xl p-4 flex flex-col items-center">
-                    <span className="text-[8px] text-zinc-500 font-mono uppercase tracking-widest mb-3">Active Chassis Projections</span>
-                    <div className="grid grid-cols-2 gap-4 w-full h-24">
-                      {/* P1 Preview */}
-                      <div className="flex flex-col items-center justify-center border border-blue-500/10 bg-blue-500/5 rounded-xl relative overflow-hidden">
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.12),transparent_70%)] rounded-full blur" />
-                        <div className="scale-75 relative z-10">
-                          {renderCardVehiclePreview(blueConfig.model, blueConfig.primary, blueConfig.secondary, blueConfig.decal || 'none')}
-                        </div>
-                        <span className="absolute bottom-1.5 text-[7px] text-blue-400 font-mono font-bold tracking-widest uppercase">P1 BLUE</span>
-                      </div>
-                      
-                      {/* P2 Preview */}
-                      <div className="flex flex-col items-center justify-center border border-red-500/10 bg-red-500/5 rounded-xl relative overflow-hidden">
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.12),transparent_70%)] rounded-full blur" />
-                        <div className="scale-75 relative z-10">
-                          {renderCardVehiclePreview(redConfig.model, redConfig.primary, redConfig.secondary, redConfig.decal || 'none')}
-                        </div>
-                        <span className="absolute bottom-1.5 text-[7px] text-red-400 font-mono font-bold tracking-widest uppercase">P2 RED</span>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* COLUMN 2 (SHARED AESTHETIC VISUALS PANEL) - grid-cols-12 span 7 */}
-                <div className="lg:col-span-7 bg-zinc-950/40 border border-zinc-900 rounded-2xl p-5 md:p-6 flex flex-col gap-6 relative">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
-                  
-                  {/* Styling Header */}
-                  <div className="flex flex-col gap-1 border-b border-zinc-900/80 pb-4">
-                    <div className="flex items-center gap-2">
-                       <span className="text-[10px] font-black tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-md uppercase font-mono">
-                         SYNCHRONIZED AESTHETICS (SAME PAINTS & VINYLS)
-                       </span>
-                    </div>
-                    <span className="text-[9px] text-zinc-500 font-mono uppercase tracking-widest leading-none mt-1">
-                      Both players drive with the same high-prestige paints and decals
-                    </span>
-                  </div>
-
-                  {/* 2-Column Side-by-Side paints and vinyls grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                    
-                    {/* LEFT CELL: PAINTS */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-lg bg-pink-500/10 border border-pink-500/25 flex items-center justify-center text-pink-400">
-                          <Flame className="w-3.5 h-3.5" />
-                        </div>
-                        <h3 className="text-[10px] font-black text-white uppercase tracking-widest font-mono">1. BODY COLOR coating</h3>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-2">
+                    {/* B. Body Color paint 선택 */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-red-400 uppercase tracking-widest font-mono block font-mono">B. Body Color Coating</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 tracking-wide custom-scrollbar">
                         {SHARED_PALETTES.map((pal) => {
-                          const isSelected = blueConfig.primary === pal.primary;
+                          const isSelected = redConfig.primary === pal.primary;
                           const isUnlocked = pal.price === 0 || unlockedPalettes.includes(pal.name);
                           const rStyles = getRarityStyles(pal.rarity);
                           return (
                             <button
-                              key={`shared-pal-${pal.name}`}
-                              onClick={() => {
-                                handlePaletteClick(pal, true);
-                              }}
-                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2.5 relative overflow-hidden cursor-pointer h-[50px] ${
+                              key={`shared-pal-red-${pal.name}`}
+                              onClick={() => handlePaletteClick(pal, false)}
+                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
                                 isSelected
-                                  ? 'bg-zinc-900/95 border-amber-500 text-white shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-850'
+                                  ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_8px_rgba(239,68,68,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
                               }`}
                             >
-                              {/* Color circle split indicators */}
-                              <div className="w-7 h-7 rounded-full flex overflow-hidden border border-white/10 shrink-0 relative">
+                              <div className="w-5 h-5 rounded-full flex overflow-hidden border border-white/10 shrink-0 relative">
                                 <span className="w-1/2 h-full" style={{ backgroundColor: pal.primary }} />
                                 <span className="w-1/2 h-full" style={{ backgroundColor: pal.secondary }} />
                                 {!isUnlocked && (
                                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                    <Lock className="w-2.5 h-2.5 text-amber-400" />
+                                    <Lock className="w-2 h-2 text-red-500" />
                                   </div>
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <span className="text-[9px] font-black uppercase tracking-wider block leading-tight truncate">{pal.name}</span>
-                                <span className={`text-[7px] font-black tracking-widest uppercase font-mono px-1 py-0.2 rounded inline-block ${rStyles.bg} ${rStyles.text}`}>
-                                  {pal.rarity}
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{pal.name}</span>
+                                <span className={`text-[6.5px] font-bold block mt-0.5 ${rStyles.text}`}>
+                                  {isUnlocked ? pal.rarity : `${pal.price}¢`}
                                 </span>
                               </div>
-                              {!isUnlocked && (
-                                <div className="flex items-center gap-0.5 bg-amber-400/10 border border-amber-400/20 text-amber-300 font-mono text-[8px] font-bold px-1 rounded shrink-0">
-                                  <span>{pal.price}</span>
-                                  <span className="text-[6.5px]">¢</span>
-                                </div>
-                              )}
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-red-400" />}
                             </button>
                           );
                         })}
                       </div>
                     </div>
 
-                    {/* RIGHT CELL: VINYLS (DECALS) */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 rounded-lg bg-cyan-500/10 border border-cyan-500/25 flex items-center justify-center text-cyan-400">
-                          <Zap className="w-3.5 h-3.5" />
-                        </div>
-                        <h3 className="text-[10px] font-black text-white uppercase tracking-widest font-mono">2. PREMIUM VINYL DECAL</h3>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-2">
-                        {[...DECAL_ITEMS].sort((a, b) => a.price - b.price).map((item) => {
-                          const isSelected = blueConfig.decal === item.id || (!blueConfig.decal && item.id === 'none');
+                    {/* C. Vinyl decals 선택 */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-red-400 uppercase tracking-widest font-mono block">C. Premium Vinyl Decal</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
+                        {DECAL_ITEMS.map((item) => {
+                          const isSelected = redConfig.decal === item.id || (!redConfig.decal && item.id === 'none');
                           const isUnlocked = item.price === 0 || unlockedDecals.includes(item.id);
                           return (
                             <button
-                              key={`shared-decal-${item.id}`}
-                              onClick={() => {
-                                handleDecalClick(item, true);
-                              }}
-                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2.5 relative overflow-hidden cursor-pointer h-[50px] ${
+                              key={`shared-decal-red-${item.id}`}
+                              onClick={() => handleDecalClick(item, false)}
+                              className={`p-1.5 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
                                 isSelected
-                                  ? 'bg-zinc-900/95 border-amber-500 text-white shadow-[0_0_12px_rgba(245,158,11,0.25)]'
-                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-850'
+                                  ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_8px_rgba(239,68,68,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
                               }`}
                             >
-                              {/* Decal mini circle indicator */}
-                              <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-black/50 border border-white/5 shrink-0 overflow-hidden relative">
-                                <div className="scale-[0.25] absolute">
-                                  {renderCardVehiclePreview(blueConfig.model, blueConfig.primary, blueConfig.secondary, item.id)}
+                              <div className="w-10 h-10 rounded bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 relative overflow-hidden">
+                                <div className="scale-[0.38] transform rotate-90 flex items-center justify-center absolute z-10">
+                                  {renderCardVehiclePreview(redConfig.model, redConfig.primary, redConfig.secondary, item.id, redConfig.wheels)}
                                 </div>
                                 {!isUnlocked && (
-                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                    <Lock className="w-2.5 h-2.5 text-amber-400" />
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+                                    <Lock className="w-2.5 h-2.5 text-red-500" />
                                   </div>
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <span className="text-[9px] font-black uppercase tracking-wider block leading-tight truncate">{item.label}</span>
-                                <span className="text-[7px] text-zinc-500 font-mono">
-                                  {isUnlocked ? 'AVAILABLE' : 'PREMIUM DECAL'}
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{item.label}</span>
+                                <span className="text-[6.5px] text-zinc-500 font-mono block mt-0.5">{isUnlocked ? 'DECAL' : `${item.price}¢`}</span>
+                              </div>
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-red-500" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* D. Performance Alloys 선택 (VARYING SPEED AS REQUESTED) */}
+                    <div className="space-y-2">
+                      <label className="text-[9px] font-black text-red-400 uppercase tracking-widest font-mono block">D. Alloy Wheels (Speed Altering)</label>
+                      <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar">
+                        {MARKET_WHEELS.map((item) => {
+                          const isSelected = redConfig.wheels === item.id || (!redConfig.wheels && item.id === 'classic');
+                          const isUnlocked = item.price === 0 || unlockedWheels.includes(item.id);
+                          const isBetter = item.speedBonus > 0;
+                          return (
+                            <button
+                              key={`shared-wheels-red-${item.id}`}
+                              onClick={() => handleWheelClick(item, false)}
+                              className={`p-2 rounded-xl border text-left transition-all flex items-center gap-2 relative overflow-hidden cursor-pointer ${
+                                isSelected
+                                  ? 'bg-red-500/15 border-red-500 text-white shadow-[0_0_8px_rgba(239,68,68,0.15)]'
+                                  : 'bg-zinc-900/40 border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                              }`}
+                            >
+                              <div className="w-10 h-7 rounded bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 relative overflow-hidden">
+                                <div className="z-10 flex items-center justify-center">
+                                  {renderSingleWheelSVG(item.id)}
+                                </div>
+                                {!isUnlocked && (
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+                                    <Lock className="w-2.5 h-2.5 text-red-500" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <span className="text-[9px] font-black uppercase tracking-wider block leading-none truncate">{item.name}</span>
+                                <span className={`text-[6.5px] font-mono block mt-0.5 font-bold ${isBetter ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                                  {isUnlocked 
+                                    ? (isBetter ? `+${item.speedBonus}% SPEED` : 'Classic Base')
+                                    : `${item.price}¢`
+                                  }
                                 </span>
                               </div>
-                              {!isUnlocked && (
-                                <div className="flex items-center gap-0.5 bg-amber-400/10 border border-amber-400/20 text-amber-300 font-mono text-[8px] font-bold px-1 rounded shrink-0">
-                                  <span>{item.price}</span>
-                                  <span className="text-[6.5px]">¢</span>
-                                </div>
-                              )}
+                              {isSelected && <Check className="absolute top-1.5 right-1.5 w-3 h-3 text-red-500" />}
                             </button>
                           );
                         })}
@@ -935,7 +1201,6 @@ export const GarageMarket: React.FC<GarageMarketProps> = ({
                     </div>
 
                   </div>
-
                 </div>
 
               </div>

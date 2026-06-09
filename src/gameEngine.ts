@@ -14,9 +14,9 @@ export interface CarProfile {
 
 export const CAR_PROFILES: Record<string, CarProfile> = {
   beast: {
-    maxBaseSpeed: 6.0,
-    maxBoostSpeed: 9.5,
-    accel: 0.14,
+    maxBaseSpeed: 8.0,
+    maxBoostSpeed: 12.0,
+    accel: 0.20,
     rotSpeed: 0.045,
     weight: 1.85,
     driftGrip: 0.94,
@@ -24,9 +24,9 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 1.6,
   },
   spectre: {
-    maxBaseSpeed: 7.5,
-    maxBoostSpeed: 11.2,
-    accel: 0.19,
+    maxBaseSpeed: 9.5,
+    maxBoostSpeed: 14.2,
+    accel: 0.25,
     rotSpeed: 0.062,
     weight: 0.75,
     driftGrip: 0.86,
@@ -34,9 +34,9 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 0.8,
   },
   cyber: {
-    maxBaseSpeed: 6.8,
-    maxBoostSpeed: 10.4,
-    accel: 0.17,
+    maxBaseSpeed: 8.8,
+    maxBoostSpeed: 13.0,
+    accel: 0.22,
     rotSpeed: 0.054,
     weight: 1.25,
     driftGrip: 0.90,
@@ -44,9 +44,9 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 1.15,
   },
   phantom: {
-    maxBaseSpeed: 7.0,
-    maxBoostSpeed: 10.7,
-    accel: 0.18,
+    maxBaseSpeed: 9.0,
+    maxBoostSpeed: 13.5,
+    accel: 0.23,
     rotSpeed: 0.057,
     weight: 1.05,
     driftGrip: 0.92,
@@ -54,9 +54,9 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 1.0,
   },
   phoenix: {
-    maxBaseSpeed: 7.2,
-    maxBoostSpeed: 11.0,
-    accel: 0.20,
+    maxBaseSpeed: 9.2,
+    maxBoostSpeed: 13.8,
+    accel: 0.25,
     rotSpeed: 0.055,
     weight: 1.45,
     driftGrip: 0.89,
@@ -64,9 +64,9 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 1.25,
   },
   interstellar: {
-    maxBaseSpeed: 6.8,
-    maxBoostSpeed: 10.5,
-    accel: 0.16,
+    maxBaseSpeed: 8.8,
+    maxBoostSpeed: 13.5,
+    accel: 0.22,
     rotSpeed: 0.052,
     weight: 1.0,
     driftGrip: 0.91,
@@ -74,20 +74,103 @@ export const CAR_PROFILES: Record<string, CarProfile> = {
     ramForceBonus: 1.0,
   },
   void: {
-    maxBaseSpeed: 7.8,
-    maxBoostSpeed: 11.5,
-    accel: 0.22,
+    maxBaseSpeed: 9.8,
+    maxBoostSpeed: 14.8,
+    accel: 0.28,
     rotSpeed: 0.065,
     weight: 1.15,
     driftGrip: 0.95,
     boostEfficiency: 1.4,
     ramForceBonus: 1.3,
+  },
+  centurion: {
+    maxBaseSpeed: 8.5,
+    maxBoostSpeed: 12.8,
+    accel: 0.21,
+    rotSpeed: 0.050,
+    weight: 1.5,
+    driftGrip: 0.93,
+    boostEfficiency: 1.1,
+    ramForceBonus: 1.35,
+  },
+  spectre_electro: {
+    maxBaseSpeed: 9.6,
+    maxBoostSpeed: 14.5,
+    accel: 0.26,
+    rotSpeed: 0.064,
+    weight: 0.85,
+    driftGrip: 0.88,
+    boostEfficiency: 1.25,
+    ramForceBonus: 0.9,
+  },
+  classified: {
+    maxBaseSpeed: 10.2,
+    maxBoostSpeed: 15.5,
+    accel: 0.30,
+    rotSpeed: 0.068,
+    weight: 1.35,
+    driftGrip: 0.94,
+    boostEfficiency: 1.5,
+    ramForceBonus: 1.4,
+  },
+  apex: {
+    maxBaseSpeed: 9.0,
+    maxBoostSpeed: 13.5,
+    accel: 0.23,
+    rotSpeed: 0.056,
+    weight: 1.3,
+    driftGrip: 0.91,
+    boostEfficiency: 1.05,
+    ramForceBonus: 1.2,
+  },
+  glacier: {
+    maxBaseSpeed: 9.2,
+    maxBoostSpeed: 13.8,
+    accel: 0.24,
+    rotSpeed: 0.058,
+    weight: 1.1,
+    driftGrip: 0.96,
+    boostEfficiency: 1.15,
+    ramForceBonus: 1.05,
+  },
+  reaper: {
+    maxBaseSpeed: 9.4,
+    maxBoostSpeed: 14.0,
+    accel: 0.26,
+    rotSpeed: 0.062,
+    weight: 1.2,
+    driftGrip: 0.85,
+    boostEfficiency: 1.3,
+    ramForceBonus: 1.1,
+  },
+  nemesis: {
+    maxBaseSpeed: 9.5,
+    maxBoostSpeed: 14.2,
+    accel: 0.27,
+    rotSpeed: 0.064,
+    weight: 1.15,
+    driftGrip: 0.92,
+    boostEfficiency: 1.35,
+    ramForceBonus: 1.15,
   }
+};
+
+export const WHEEL_MULTIPLIERS: Record<string, { speed: number; accel: number }> = {
+  classic: { speed: 1.0, accel: 1.0 },
+  cyber: { speed: 1.05, accel: 1.05 },
+  magma: { speed: 1.10, accel: 1.10 },
+  frost: { speed: 1.15, accel: 1.15 },
+  gold_star: { speed: 1.22, accel: 1.22 },
+  classified_drive: { speed: 1.30, accel: 1.30 },
 };
 
 export class GameEngine {
   public ball: BallState;
   public cars: { blue: CarState; red: CarState };
+  public extraBlueCars: CarState[] = [];
+  public extraRedCars: CarState[] = [];
+  public matchFormat: '1v1' | '2v2' | '3v3' = '1v1';
+  public difficulty: 'easy' | 'normal' | 'hard' | 'pro' = 'normal';
   public particles: Particle[] = [];
   public boostPads: BoostPad[] = [];
   
@@ -113,21 +196,35 @@ export class GameEngine {
     this.initBoostPads();
   }
 
+  public getAllCars(): CarState[] {
+    return [this.cars.blue, ...this.extraBlueCars, this.cars.red, ...this.extraRedCars];
+  }
+
   public resetMatch() {
     this.cars.blue.score = 0;
     this.cars.red.score = 0;
+    this.extraBlueCars.forEach(c => c.score = 0);
+    this.extraRedCars.forEach(c => c.score = 0);
     this.resetPositions();
   }
 
   public resetPositions(goalScoredReset: boolean = false) {
+    this.matchFormat = '1v1';
     this.ball = this.getResetBall();
-    this.cars.blue = { ...this.cars.blue, ...this.getResetCar('blue') };
-    this.cars.red = { ...this.cars.red, ...this.getResetCar('red') };
+    this.cars.blue = { ...this.cars.blue, ...this.getResetCar('blue', 0) };
+    this.cars.red = { ...this.cars.red, ...this.getResetCar('red', 0) };
+
+    // Limit maximum players in all modes to 2 (1v1 duel format)
+    this.extraBlueCars = [];
+    this.extraRedCars = [];
+
     if (this.currentMode === 'free_practice' || this.currentMode === 'machine_practice') {
       this.cars.red.x = 9999;
       this.cars.red.y = 9999;
       this.cars.red.vx = 0;
       this.cars.red.vy = 0;
+      this.extraBlueCars = [];
+      this.extraRedCars = [];
     }
     if (this.currentMode === 'machine_practice' && !goalScoredReset) {
       this.machineTimer = 0;
@@ -152,21 +249,42 @@ export class GameEngine {
     };
   }
 
-  private getResetCar(id: 'blue' | 'red'): CarState {
+  private getResetCar(
+    id: 'blue' | 'red',
+    indexOffset: number = 0,
+    customName?: string,
+    role?: 'striker' | 'defender' | 'hybrid' | 'goalkeeper'
+  ): CarState {
     const isBlue = id === 'blue';
+    let initialX = isBlue ? this.width * 0.22 : this.width * 0.78;
+    let initialY = this.height / 2;
+
+    if (indexOffset === 1) {
+      initialX = isBlue ? this.width * 0.15 : this.width * 0.85;
+      initialY = this.height / 2 - 130;
+    } else if (indexOffset === 2) {
+      initialX = isBlue ? this.width * 0.15 : this.width * 0.85;
+      initialY = this.height / 2 + 130;
+    }
+
     return {
       id,
-      x: isBlue ? this.width * 0.22 : this.width * 0.78,
-      y: this.height / 2,
+      team: id,
+      x: initialX,
+      y: initialY,
       vx: 0,
       vy: 0,
       angle: isBlue ? 0 : Math.PI, // Face centre
       boostTimeLeft: 0,
       isBoosting: false,
-      score: this.cars ? this.cars[id].score : 0,
+      score: (this.cars && this.cars[id]) ? this.cars[id].score : 0,
       colorPrimary: (this.cars && this.cars[id]) ? this.cars[id].colorPrimary : (isBlue ? '#3b82f6' : '#ef4444'),
       colorSecondary: (this.cars && this.cars[id]) ? this.cars[id].colorSecondary : (isBlue ? '#60a5fa' : '#f87171'),
       carModel: (this.cars && this.cars[id]) ? this.cars[id].carModel : 'interstellar',
+      decal: (this.cars && this.cars[id]) ? this.cars[id].decal : 'none',
+      wheels: (this.cars && this.cars[id]) ? this.cars[id].wheels : 'classic',
+      role: role || 'hybrid',
+      playerName: customName || (isBlue ? 'Player Blue' : 'Rival Bot'),
     };
   }
 
@@ -203,52 +321,82 @@ export class GameEngine {
     const keys: Record<string, boolean> = {};
     const ball = this.ball;
 
+    const isBlueSide = car.id === 'blue' || car.team === 'blue';
+    const isRedSide = car.id === 'red' || car.team === 'red';
+
     let tx = ball.x;
     let ty = ball.y;
 
-    const isBlue = car.id === 'blue';
-    const isRed = car.id === 'red';
+    // --- Predictive Target Forecasting based on AI Difficulty coefficient ---
+    if (this.difficulty === 'pro') {
+      // Forecast velocity projections
+      tx = ball.x + ball.vx * 15;
+      ty = ball.y + ball.vy * 15;
+    } else if (this.difficulty === 'hard') {
+      tx = ball.x + ball.vx * 8;
+      ty = ball.y + ball.vy * 8;
+    }
 
-    // Calculate distance to ball
     const distToBall = Math.sqrt(Math.pow(ball.x - car.x, 2) + Math.pow(ball.y - car.y, 2));
+
+    // --- Dynamic Positioning Adaptation based on Signed Roster Role ---
+    if (car.role === 'goalkeeper') {
+      const goalX = isBlueSide ? 65 : this.width - 65;
+      const isBallDangerous = isBlueSide ? ball.x < this.width * 0.35 : ball.x > this.width * 0.65;
+      
+      if (!isBallDangerous) {
+        // Return to protector guard position near mid-goal line
+        tx = goalX + (isBlueSide ? 40 : -40);
+        ty = Math.max(180, Math.min(520, ball.y));
+      }
+    } else if (car.role === 'defender') {
+      const midPoint = this.width / 2;
+      const ballInOppComponent = isBlueSide ? ball.x > midPoint : ball.x < midPoint;
+      
+      if (ballInOppComponent && distToBall > 350) {
+        // Guard defensive central half
+        tx = isBlueSide ? this.width * 0.35 : this.width * 0.65;
+        ty = ball.y;
+      }
+    }
 
     // 1. Kickoff Phase (ball is static in the exact center)
     const isKickoff = ball.x === this.width / 2 && ball.y === this.height / 2 && Math.abs(ball.vx) < 0.1 && Math.abs(ball.vy) < 0.1;
 
     if (isKickoff) {
-      if (isBlue) {
-        // Approach kickoff from slight northern angle
+      if (isBlueSide) {
         tx = ball.x - 25;
         ty = ball.y - 40;
       } else {
-        // Approach kickoff from slight southern angle
         tx = ball.x + 25;
         ty = ball.y + 40;
       }
     } else {
       // 2. Standard Active Gameplay
-      if (isBlue) {
+      if (isBlueSide) {
         // BLUE attacks RIGHT (towards x=1200)
         const ballBehindCar = ball.x < car.x + 45;
         const isDefending = ball.x < this.width * 0.42;
 
-        if (ballBehindCar) {
-          // Ball is behind blue car, circle around cleanly to avoid pushing it backwards
-          // Go wide to the left of the ball
+        if (ballBehindCar && car.role !== 'goalkeeper') {
+          // Circle around cleanly to avoid pushing it backwards
           tx = ball.x - 100;
           ty = car.y > ball.y ? ball.y - 130 : ball.y + 130;
-        } else if (isDefending && ball.x < 180) {
+        } else if (isDefending && ball.x < 180 && car.role !== 'striker') {
           // Severe local goal line defense
           tx = 50;
           ty = Math.max(160, Math.min(540, ball.y));
         } else {
           // Attack path: target slightly behind the ball angled toward opponent's goal center
-          tx = ball.x - 22;
-          ty = ball.y + (350 - ball.y) * 0.22;
+          if (car.role !== 'goalkeeper' && car.role !== 'defender') {
+            tx = ball.x - 22;
+            ty = ball.y + (350 - ball.y) * 0.22;
+          }
         }
 
-        // Active boost pad collection of opportunity
-        if (distToBall > 320 && car.boostTimeLeft <= 0) {
+        // Active boost pad collection
+        const boostThreshold = car.boostPriority ? (350 - car.boostPriority * 150) : 320;
+        if (distToBall > boostThreshold && car.boostTimeLeft <= 0 && car.role !== 'goalkeeper') {
           const activePads = this.boostPads.filter(p => p.active);
           let closestPad = null;
           let minPadDist = 220;
@@ -269,22 +417,24 @@ export class GameEngine {
         const ballBehindCar = ball.x > car.x - 45;
         const isDefending = ball.x > this.width * 0.58;
 
-        if (ballBehindCar) {
+        if (ballBehindCar && car.role !== 'goalkeeper') {
           // Ball is behind red car, circle around cleanly
           tx = ball.x + 100;
           ty = car.y > ball.y ? ball.y - 130 : ball.y + 130;
-        } else if (isDefending && ball.x > this.width - 180) {
+        } else if (isDefending && ball.x > this.width - 180 && car.role !== 'striker') {
           // Severe local goal line defense
           tx = this.width - 50;
           ty = Math.max(160, Math.min(540, ball.y));
         } else {
-          // Attack path: target slightly behind the ball angled toward opponent's goal
-          tx = ball.x + 22;
-          ty = ball.y + (350 - ball.y) * 0.22;
+          if (car.role !== 'goalkeeper' && car.role !== 'defender') {
+            tx = ball.x + 22;
+            ty = ball.y + (350 - ball.y) * 0.22;
+          }
         }
 
-        // Active boost pad collection of opportunity
-        if (distToBall > 320 && car.boostTimeLeft <= 0) {
+        // Active boost pad collection
+        const boostThreshold = car.boostPriority ? (350 - car.boostPriority * 150) : 320;
+        if (distToBall > boostThreshold && car.boostTimeLeft <= 0 && car.role !== 'goalkeeper') {
           const activePads = this.boostPads.filter(p => p.active);
           let closestPad = null;
           let minPadDist = 220;
@@ -301,6 +451,12 @@ export class GameEngine {
           }
         }
       }
+    }
+
+    // --- Noise injection for Easy AI coefficient difficulty ---
+    if (this.difficulty === 'easy') {
+      tx += Math.sin(Date.now() * 0.003) * 65;
+      ty += Math.cos(Date.now() * 0.003) * 65;
     }
 
     // Keep targets strictly inside arena boundary limits
@@ -326,15 +482,14 @@ export class GameEngine {
     }
 
     // Drive forward if facing target path
-    if (absDiff < Math.PI * 0.45) {
+    const steerLimit = this.difficulty === 'easy' ? Math.PI * 0.3 : Math.PI * 0.45;
+    if (absDiff < steerLimit) {
       keys['up'] = true;
     } else if (absDiff > Math.PI * 0.8 && distToBall < 100) {
-      // Reverse if target is directly behind the bot and extremely close
       keys['down'] = true;
     }
 
     // 3. Wall Stuck Mitigation Logic:
-    // If the bot is pressed against the outer wall limits or stationary, engage a continuous escape backing-up timer
     const touchWallX = car.x < 65 || car.x > this.width - 65;
     const touchWallY = car.y < 55 || car.y > this.height - 55;
     const currentSpd = Math.sqrt(car.vx * car.vx + car.vy * car.vy);
@@ -342,7 +497,6 @@ export class GameEngine {
 
     if (touchWallX || touchWallY || (car.stuckFrames && car.stuckFrames > 15)) {
       if (isStationary && (!car.escapeTimer || car.escapeTimer <= 0)) {
-        // Initialize static escape sequence for 45 frames (almost 1 sec)
         car.escapeTimer = 45;
         car.escapeDir = Math.random() < 0.5 ? 'left' : 'right';
       }
@@ -351,7 +505,6 @@ export class GameEngine {
     // Run active escape sequence if timer is ticking
     if (car.escapeTimer && car.escapeTimer > 0) {
       car.escapeTimer--;
-      // Override driven inputs to reverse backup and steer hard in the locked escape direction
       keys['up'] = false;
       keys['down'] = true;
       if (car.escapeDir === 'left') {
@@ -393,7 +546,7 @@ export class GameEngine {
       // P1 (Blue) = WASD, P2 (Red) = Arrows
       this.updateCar(this.cars.blue, keys, 'w', 's', 'a', 'd');
       this.updateCar(this.cars.red, keys, 'arrowup', 'arrowdown', 'arrowleft', 'arrowright');
-    } else if (gameMode === 'vs_bot') {
+    } else if (gameMode === 'vs_bot' || gameMode === 'career') {
       // Player (Blue) = WASD, Bot (Red) = AI Bot
       const redBotKeys = this.getBotInputs(this.cars.red, this.cars.blue);
       this.updateCar(this.cars.blue, keys, 'w', 's', 'a', 'd');
@@ -404,6 +557,18 @@ export class GameEngine {
       const redBotKeys = this.getBotInputs(this.cars.red, this.cars.blue);
       this.updateCar(this.cars.blue, blueBotKeys, 'up', 'down', 'left', 'right');
       this.updateCar(this.cars.red, redBotKeys, 'up', 'down', 'left', 'right');
+    }
+
+    // UPDATE EXTRA TEAMMATES/OPPONENTS
+    if (this.matchFormat === '2v2' || this.matchFormat === '3v3') {
+      this.extraBlueCars.forEach(car => {
+        const keysBot = this.getBotInputs(car, this.cars.red);
+        this.updateCar(car, keysBot, 'up', 'down', 'left', 'right');
+      });
+      this.extraRedCars.forEach(car => {
+        const keysBot = this.getBotInputs(car, this.cars.blue);
+        this.updateCar(car, keysBot, 'up', 'down', 'left', 'right');
+      });
     } else if (gameMode === 'free_practice' || gameMode === 'machine_practice') {
       // Free Practice & Machine Practice: Blue Car is controlled via WASD
       this.updateCar(this.cars.blue, keys, 'w', 's', 'a', 'd');
@@ -603,12 +768,15 @@ export class GameEngine {
     }
 
     // Physics parameters from profile
-    const baseAccel = profile.accel;
-    const boostAccel = profile.accel * 2.375;
+    const wheelId = car.wheels || 'classic';
+    const wheelMult = WHEEL_MULTIPLIERS[wheelId] || WHEEL_MULTIPLIERS.classic;
+
+    const baseAccel = profile.accel * wheelMult.accel;
+    const boostAccel = profile.accel * 2.375 * wheelMult.accel;
     const accel = car.isBoosting ? boostAccel : baseAccel;
 
-    const maxBaseSpeed = profile.maxBaseSpeed;
-    const maxBoostSpeed = profile.maxBoostSpeed;
+    const maxBaseSpeed = profile.maxBaseSpeed * wheelMult.speed;
+    const maxBoostSpeed = profile.maxBoostSpeed * wheelMult.speed;
     const maxSpeed = car.isBoosting ? maxBoostSpeed : maxBaseSpeed;
 
     const friction = 0.985;
@@ -888,9 +1056,10 @@ export class GameEngine {
       this.spawnCollisionParticles(ball.x, ball.y, '#10b981');
     }
 
-    // Car-to-Ball collisions
-    this.resolveCarBallCollision(this.cars.blue);
-    this.resolveCarBallCollision(this.cars.red);
+    // Car-to-Ball collisions for all active cars
+    this.getAllCars().forEach(car => {
+      this.resolveCarBallCollision(car);
+    });
   }
 
   private resolveCarBallCollision(car: CarState) {
@@ -956,137 +1125,137 @@ export class GameEngine {
   }
 
   private resolveCarCarCollision() {
-    const bSpheres = this.getCarCollisionSpheres(this.cars.blue);
-    const rSpheres = this.getCarCollisionSpheres(this.cars.red);
+    const cars = this.getAllCars();
+    for (let i = 0; i < cars.length; i++) {
+      for (let j = i + 1; j < cars.length; j++) {
+        const carA = cars[i];
+        const carB = cars[j];
 
-    let colliding = false;
-    let pushX = 0;
-    let pushY = 0;
-    let hitX = 0;
-    let hitY = 0;
+        // Skip pairwise checks for parked practice units
+        if (carA.x > 9000 || carB.x > 9000) continue;
 
-    bSpheres.forEach(bs => {
-      rSpheres.forEach(rs => {
-        const dx = rs.x - bs.x;
-        const dy = rs.y - bs.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const minDist = bs.r + rs.r;
+        const spheresA = this.getCarCollisionSpheres(carA);
+        const spheresB = this.getCarCollisionSpheres(carB);
 
-        if (dist < minDist) {
-          colliding = true;
-          const overlap = minDist - dist;
-          pushX += (dx / dist) * overlap;
-          pushY += (dy / dist) * overlap;
-          hitX = (bs.x + rs.x) / 2;
-          hitY = (bs.y + rs.y) / 2;
-        }
-      });
-    });
+        let colliding = false;
+        let pushX = 0;
+        let pushY = 0;
+        let hitX = 0;
+        let hitY = 0;
 
-    if (colliding) {
-      // Resolve by separating blue and red cars
-      const dist = Math.sqrt(pushX * pushX + pushY * pushY);
-      if (dist > 0) {
-        const nx = pushX / dist;
-        const ny = pushY / dist;
+        spheresA.forEach(sA => {
+          spheresB.forEach(sB => {
+            const dx = sB.x - sA.x;
+            const dy = sB.y - sA.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const minDist = sA.r + sB.r;
 
-        const pBlue = CAR_PROFILES[this.cars.blue.carModel || 'interstellar'] || CAR_PROFILES.interstellar;
-        const pRed = CAR_PROFILES[this.cars.red.carModel || 'interstellar'] || CAR_PROFILES.interstellar;
+            if (dist < minDist) {
+              colliding = true;
+              const overlap = minDist - dist;
+              pushX += (dx / dist) * overlap;
+              pushY += (dy / dist) * overlap;
+              hitX = (sA.x + sB.x) / 2;
+              hitY = (sA.y + sB.y) / 2;
+            }
+          });
+        });
 
-        const wBlue = pBlue.weight || 1.0;
-        const wRed = pRed.weight || 1.0;
-        const totalW = wBlue + wRed;
+        if (colliding) {
+          const dist = Math.sqrt(pushX * pushX + pushY * pushY);
+          if (dist > 0) {
+            const nx = pushX / dist;
+            const ny = pushY / dist;
 
-        // Push separation proportional inversely to car weight (heavy car is more stable)
-        const separationFracBlue = totalW > 0 ? (wRed / totalW) : 0.5;
-        const separationFracRed = totalW > 0 ? (wBlue / totalW) : 0.5;
+            const pA = CAR_PROFILES[carA.carModel || 'interstellar'] || CAR_PROFILES.interstellar;
+            const pB = CAR_PROFILES[carB.carModel || 'interstellar'] || CAR_PROFILES.interstellar;
 
-        // Push away
-        this.cars.blue.x -= nx * dist * separationFracBlue;
-        this.cars.blue.y -= ny * dist * separationFracBlue;
+            const wA = pA.weight || 1.0;
+            const wB = pB.weight || 1.0;
+            const totalW = wA + wB;
 
-        this.cars.red.x += nx * dist * separationFracRed;
-        this.cars.red.y += ny * dist * separationFracRed;
+            const separationFracA = totalW > 0 ? (wB / totalW) : 0.5;
+            const separationFracB = totalW > 0 ? (wA / totalW) : 0.5;
 
-        // Calculate velocity elements along collision normal
-        const vBlueNormal = this.cars.blue.vx * nx + this.cars.blue.vy * ny;
-        const vRedNormal = this.cars.red.vx * nx + this.cars.red.vy * ny;
+            carA.x -= nx * dist * separationFracA;
+            carA.y -= ny * dist * separationFracA;
 
-        const ramBlue = pBlue.ramForceBonus || 1.0;
-        const ramRed = pRed.ramForceBonus || 1.0;
+            carB.x += nx * dist * separationFracB;
+            carB.y += ny * dist * separationFracB;
 
-        // We check if Blue is hitting Red (moving towards Red, i.e. vBlueNormal > 0)
-        // and if Red is hitting Blue (moving towards Blue, i.e. vRedNormal < 0)
-        const isBlueHittingRed = vBlueNormal > 0;
-        const isRedHittingBlue = vRedNormal < 0;
+            const vANormal = carA.vx * nx + carA.vy * ny;
+            const vBNormal = carB.vx * nx + carB.vy * ny;
 
-        let crashForce = 0;
+            const ramA = pA.ramForceBonus || 1.0;
+            const ramB = pB.ramForceBonus || 1.0;
 
-        if (isBlueHittingRed && isRedHittingBlue) {
-          // Head-on collision! Both cars get thrown forward in their respective rebound directions
-          const hitPowerBlue = Math.abs(vBlueNormal);
-          const hitPowerRed = Math.abs(vRedNormal);
+            const isAHittingB = vANormal > 0;
+            const isBHittingA = vBNormal < 0;
 
-          const throwPowerRed = (hitPowerBlue * 1.8 + 6.0) * ramBlue / wRed;
-          const throwPowerBlue = (hitPowerRed * 1.8 + 6.0) * ramRed / wBlue;
+            let crashForce = 0;
 
-          this.cars.red.vx += nx * throwPowerRed;
-          this.cars.red.vy += ny * throwPowerRed;
+            if (isAHittingB && isBHittingA) {
+              const hitPowerA = Math.abs(vANormal);
+              const hitPowerB = Math.abs(vBNormal);
 
-          this.cars.blue.vx -= nx * throwPowerBlue;
-          this.cars.blue.vy -= ny * throwPowerBlue;
+              const throwPowerB = (hitPowerA * 1.8 + 6.0) * ramA / wB;
+              const throwPowerA = (hitPowerB * 1.8 + 6.0) * ramB / wA;
 
-          crashForce = hitPowerBlue + hitPowerRed;
-        } else if (isBlueHittingRed) {
-          // Blue hits Red. Red is thrown forward, Blue rebounds slightly
-          const hitPower = Math.abs(vBlueNormal);
-          const throwPower = (hitPower * 1.8 + 6.0) * ramBlue / wRed;
+              carB.vx += nx * throwPowerB;
+              carB.vy += ny * throwPowerB;
 
-          this.cars.red.vx += nx * throwPower;
-          this.cars.red.vy += ny * throwPower;
+              carA.vx -= nx * throwPowerA;
+              carA.vy -= ny * throwPowerA;
 
-          this.cars.blue.vx -= nx * (hitPower * 0.4);
-          this.cars.blue.vy -= ny * (hitPower * 0.4);
+              crashForce = hitPowerA + hitPowerB;
+            } else if (isAHittingB) {
+              const hitPower = Math.abs(vANormal);
+              const throwPower = (hitPower * 1.8 + 6.0) * ramA / wB;
 
-          crashForce = hitPower;
-        } else if (isRedHittingBlue) {
-          // Red hits Blue. Blue is thrown forward, Red rebounds slightly
-          const hitPower = Math.abs(vRedNormal);
-          const throwPower = (hitPower * 1.8 + 6.0) * ramRed / wBlue;
+              carB.vx += nx * throwPower;
+              carB.vy += ny * throwPower;
 
-          this.cars.blue.vx -= nx * throwPower;
-          this.cars.blue.vy -= ny * throwPower;
+              carA.vx -= nx * (hitPower * 0.4);
+              carA.vy -= ny * (hitPower * 0.4);
 
-          this.cars.red.vx -= nx * (vRedNormal * 0.4);
-          this.cars.red.vy -= ny * (vRedNormal * 0.4);
+              crashForce = hitPower;
+            } else if (isBHittingA) {
+              const hitPower = Math.abs(vBNormal);
+              const throwPower = (hitPower * 1.8 + 6.0) * ramB / wA;
 
-          crashForce = hitPower;
-        } else {
-          // Quiet side brush or overlap. Push away slightly with minimal kinetic exchange
-          this.cars.blue.vx -= nx * 2.0 / wBlue;
-          this.cars.blue.vy -= ny * 2.0 / wBlue;
-          this.cars.red.vx += nx * 2.0 / wRed;
-          this.cars.red.vy += ny * 2.0 / wRed;
-          crashForce = 1.0;
-        }
+              carA.vx -= nx * throwPower;
+              carA.vy -= ny * throwPower;
 
-        // Cap speed of knocked-back cars to avoid extreme values breaking the screen boundaries too quickly
-        const bSpeed = Math.sqrt(this.cars.blue.vx * this.cars.blue.vx + this.cars.blue.vy * this.cars.blue.vy);
-        const rSpeed = Math.sqrt(this.cars.red.vx * this.cars.red.vx + this.cars.red.vy * this.cars.red.vy);
-        const capSpeed = 18.0; // slightly higher cap to allow awesome extreme launches!
-        if (bSpeed > capSpeed) {
-          this.cars.blue.vx = (this.cars.blue.vx / bSpeed) * capSpeed;
-          this.cars.blue.vy = (this.cars.blue.vy / bSpeed) * capSpeed;
-        }
-        if (rSpeed > capSpeed) {
-          this.cars.red.vx = (this.cars.red.vx / rSpeed) * capSpeed;
-          this.cars.red.vy = (this.cars.red.vy / rSpeed) * capSpeed;
-        }
+              carB.vx -= nx * (vBNormal * 0.4);
+              carB.vy -= ny * (vBNormal * 0.4);
 
-        if (crashForce > 1.2) {
-          sounds.playHit(crashForce > 4);
-          this.screenShake = Math.min(crashForce * 1.8, 12);
-          this.spawnCollisionParticles(hitX, hitY, '#ffffff');
+              crashForce = hitPower;
+            } else {
+              carA.vx -= nx * 2.0 / wA;
+              carA.vy -= ny * 2.0 / wA;
+              carB.vx += nx * 2.0 / wB;
+              carB.vy += ny * 2.0 / wB;
+              crashForce = 1.0;
+            }
+
+            const bSpeed = Math.sqrt(carA.vx * carA.vx + carA.vy * carA.vy);
+            const rSpeed = Math.sqrt(carB.vx * carB.vx + carB.vy * carB.vy);
+            const capSpeed = 18.0;
+            if (bSpeed > capSpeed) {
+              carA.vx = (carA.vx / bSpeed) * capSpeed;
+              carA.vy = (carA.vy / bSpeed) * capSpeed;
+            }
+            if (rSpeed > capSpeed) {
+              carB.vx = (carB.vx / rSpeed) * capSpeed;
+              carB.vy = (carB.vy / rSpeed) * capSpeed;
+            }
+
+            if (crashForce > 1.2) {
+              sounds.playHit(crashForce > 4);
+              this.screenShake = Math.min(crashForce * 1.8, 12);
+              this.spawnCollisionParticles(hitX, hitY, '#ffffff');
+            }
+          }
         }
       }
     }

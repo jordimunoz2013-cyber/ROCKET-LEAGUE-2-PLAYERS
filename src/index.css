@@ -5,3 +5,91 @@
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+@keyframes cyber-pulse {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1) translate(0px, 0px);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(1.15) translate(30px, -20px);
+  }
+}
+
+@keyframes cyber-pulse-reverse {
+  0%, 100% {
+    opacity: 0.12;
+    transform: scale(1.1) translate(0px, 0px);
+  }
+  50% {
+    opacity: 0.28;
+    transform: scale(0.9) translate(-40px, 30px);
+  }
+}
+
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+.animate-cyber-pulse-fast {
+  animation: cyber-pulse 10s ease-in-out infinite;
+}
+
+.animate-cyber-pulse-slow {
+  animation: cyber-pulse-reverse 15s ease-in-out infinite;
+}
+
+/* Beautiful esports-style background combining mesh gradient, grid lines, and glowing blobs */
+.cyber-canvas-bg {
+  position: relative;
+  background-color: #03010a;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(88, 28, 135, 0.22) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(30, 64, 175, 0.18) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(6, 182, 212, 0.12) 0px, transparent 45%);
+  overflow: hidden;
+}
+
+.cyber-canvas-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-drift 24s linear infinite;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Cyber ambient overlay highlights */
+.cyber-glow-blob-1 {
+  position: absolute;
+  top: -10%;
+  left: 20%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(168, 85, 247, 0) 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.cyber-glow-blob-2 {
+  position: absolute;
+  bottom: -5%;
+  right: 15%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(6, 182, 212, 0) 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  border-radius: 50%;
+}
+

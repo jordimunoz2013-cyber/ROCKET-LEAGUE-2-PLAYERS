@@ -5,6 +5,20 @@ import { ReplayHUD } from './components/ReplayHUD';
 import { GameEngine } from './gameEngine';
 import { GamePhase, CONFIG, ReplayFrame, ReplayEvent, SavedReplay, GameMode } from './types';
 import { sounds } from './audio';
+import { CareerMode } from './components/CareerMode';
+import { SettingsModal } from './components/SettingsModal';
+import { ManagerMode } from './components/ManagerMode';
+import { BattlePassModal } from './components/BattlePassModal';
+import { TrophiesLeaderboardModal } from './components/TrophiesLeaderboardModal';
+
+export const WHEEL_TYPES = {
+  classic: { color: '#1e293b', rim: '#475569', label: 'Classic Obsidian' },
+  cyber: { color: '#090d16', rim: '#00ffff', label: 'Cyber Neon' },
+  magma: { color: '#1a0902', rim: '#f97316', label: 'Magma Fusion' },
+  frost: { color: '#051821', rim: '#38bdf8', label: 'Frost Overdrive' },
+  gold_star: { color: '#1f1601', rim: '#fbbf24', label: 'Stellar Gold' },
+  classified_drive: { color: '#16021f', rim: '#d946ef', label: 'Singularity Drive' },
+};
 
 export default function App() {
   const [phase, setPhase] = useState<GamePhase>('MENU');
@@ -18,10 +32,13 @@ export default function App() {
   const [winner, setWinner] = useState<'blue' | 'red' | null>(null);
   const [gameMode, setGameMode] = useState<GameMode>('same_laptop');
 
+  const [blueTeamName, setBlueTeamName] = useState<string>("BLUE TEAM");
+  const [redTeamName, setRedTeamName] = useState<string>("RED TEAM");
+
   // PERSONALIZATION GARAGE & CAR MARKET
   const [coins, setCoins] = useState<number>(() => {
     const saved = localStorage.getItem('mini_rocket_coins');
-    return saved ? parseInt(saved, 10) : 150; // default 150 setup bonus
+    return saved ? parseInt(saved, 10) : 1200; // default 1200 setup bonus
   });
 
   const [unlockedModels, setUnlockedModels] = useState<string[]>(() => {
@@ -39,6 +56,11 @@ export default function App() {
     return saved ? JSON.parse(saved) : ['none'];
   });
 
+  const [unlockedWheels, setUnlockedWheels] = useState<string[]>(() => {
+    const saved = localStorage.getItem('mini_rocket_unlocked_wheels');
+    return saved ? JSON.parse(saved) : ['classic'];
+  });
+
   const [selectedStadium, setSelectedStadium] = useState<string>(() => {
     const saved = localStorage.getItem('mini_rocket_selected_stadium');
     return saved ? saved : 'emerald';
@@ -46,43 +68,153 @@ export default function App() {
 
   const [blueConfig, setBlueConfig] = useState(() => {
     const saved = localStorage.getItem('mini_rocket_blue_config');
-    return saved ? JSON.parse(saved) : { model: 'interstellar', primary: '#3b82f6', secondary: '#60a5fa', decal: 'none' };
+    return saved ? JSON.parse(saved) : { model: 'interstellar', primary: '#3b82f6', secondary: '#60a5fa', decal: 'none', wheels: 'classic' };
   });
 
   const [redConfig, setRedConfig] = useState(() => {
     const saved = localStorage.getItem('mini_rocket_red_config');
-    const red = saved ? JSON.parse(saved) : { model: 'interstellar', primary: '#3b82f6', secondary: '#60a5fa', decal: 'none' };
-    
-    // Ensure red inherits the same paint colors and decals from blue configurations initially
-    const blueSaved = localStorage.getItem('mini_rocket_blue_config');
-    const blue = blueSaved ? JSON.parse(blueSaved) : { primary: '#3b82f6', secondary: '#60a5fa', decal: 'none' };
-    return {
-      ...red,
-      primary: blue.primary,
-      secondary: blue.secondary,
-      decal: blue.decal || 'none'
-    };
+    return saved ? JSON.parse(saved) : { model: 'interstellar', primary: '#ef4444', secondary: '#f87171', decal: 'none', wheels: 'classic' };
   });
 
   const handleUpdateBlueConfig = (config: any) => {
     setBlueConfig(config);
-    setRedConfig((prev: any) => ({
-      ...prev,
-      primary: config.primary,
-      secondary: config.secondary,
-      decal: config.decal || 'none'
-    }));
   };
 
   const handleUpdateRedConfig = (config: any) => {
     setRedConfig(config);
-    setBlueConfig((prev: any) => ({
-      ...prev,
-      primary: config.primary,
-      secondary: config.secondary,
-      decal: config.decal || 'none'
-    }));
   };
+  
+  // Competitive Rank and Battle Pass Integration States
+  const [playerName, setPlayerName] = useState<string>(() => {
+    return localStorage.getItem('mini_rocket_player_name') || 'Jordi Muñoz';
+  });
+  
+  const [playerTrophies, setPlayerTrophies] = useState<number>(() => {
+    const saved = localStorage.getItem('mini_rocket_player_trophies');
+    return saved ? parseInt(saved, 10) : 120; // default 120 Bronze
+  });
+
+  const [isCompetitiveRanked, setIsCompetitiveRanked] = useState<boolean>(true);
+  
+  const [isBattlePassOpen, setIsBattlePassOpen] = useState(false);
+  const [isTrophiesOpen, setIsTrophiesOpen] = useState(false);
+
+  // Post-match states
+  const [bpXpGained, setBpXpGained] = useState(25);
+  const [bpXpBefore, setBpXpBefore] = useState(0);
+  const [bpXpAfter, setBpXpAfter] = useState(25);
+  const [bpLevelBefore, setBpLevelBefore] = useState(1);
+  const [bpLevelAfter, setBpLevelAfter] = useState(1);
+  const [isBpAdvancedOwned, setIsBpAdvancedOwned] = useState(false);
+  const [trophiesGained, setTrophiesGained] = useState(0);
+  const [previousTrophies, setPreviousTrophies] = useState(100);
+
+  // Profile mutators and unlocked callbacks
+  const handleUpdatePlayerName = (name: string) => {
+    setPlayerName(name);
+    localStorage.setItem('mini_rocket_player_name', name);
+  };
+
+  const handleAddCoins = (amount: number) => {
+    setCoins((prev) => {
+      const next = Math.max(0, prev + amount);
+      localStorage.setItem('mini_rocket_coins', String(next));
+      return next;
+    });
+  };
+
+  const handleAddUnlockedModel = (model: string) => {
+    setUnlockedModels(prev => {
+      if (prev.includes(model)) return prev;
+      const next = [...prev, model];
+      localStorage.setItem('mini_rocket_unlocked_models', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleAddUnlockedPalette = (palette: string) => {
+    setUnlockedPalettes(prev => {
+      if (prev.includes(palette)) return prev;
+      const next = [...prev, palette];
+      localStorage.setItem('mini_rocket_unlocked_palettes', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleAddUnlockedDecal = (decal: string) => {
+    setUnlockedDecals(prev => {
+      if (prev.includes(decal)) return prev;
+      const next = [...prev, decal];
+      localStorage.setItem('mini_rocket_unlocked_decals', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleAddUnlockedWheels = (wheels: string) => {
+    setUnlockedWheels(prev => {
+      if (prev.includes(wheels)) return prev;
+      const next = [...prev, wheels];
+      localStorage.setItem('mini_rocket_unlocked_wheels', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const processMatchRewardsAndSaves = (playerWon: boolean) => {
+    const isTraining = gameMode === 'free_practice' || gameMode === 'machine_practice' || gameMode.includes('practice') || gameMode.includes('training');
+
+    // 1. Coins standard earned
+    const earnedCoins = isTraining ? 0 : (playerWon ? 25 : 10);
+    setCoins((prev) => {
+      const next = Math.max(0, prev + earnedCoins);
+      localStorage.setItem('mini_rocket_coins', String(next));
+      return next;
+    });
+
+    // 2. Battle pass increments
+    const activeSeasonIndexStr = localStorage.getItem('mini_rocket_bp_active_season_idx') || '0';
+    const activeSeasonIndex = parseInt(activeSeasonIndexStr, 10);
+    const seasonId = activeSeasonIndex === 1 ? 'season_gravity_core' : activeSeasonIndex === 2 ? 'season_overdrive_arena' : 'season_rocket_cars';
+    const savedXp = parseInt(localStorage.getItem(`mini_rocket_bp_xp_${seasonId}`) || '0', 10);
+    const savedLvl = parseInt(localStorage.getItem(`mini_rocket_bp_lvl_${seasonId}`) || '1', 10);
+    const savedPaid = localStorage.getItem(`mini_rocket_bp_premium_${seasonId}`) === 'true';
+
+    const xpPerLvl = savedPaid ? 50 : 100;
+    const gainedXp = isTraining ? 0 : 25;
+    let newXp = savedXp + gainedXp;
+    let newLvl = savedLvl;
+
+    while (newXp >= xpPerLvl) {
+      newXp -= xpPerLvl;
+      newLvl += 1;
+    }
+
+    // Save Battle Pass
+    localStorage.setItem(`mini_rocket_bp_xp_${seasonId}`, String(newXp));
+    localStorage.setItem(`mini_rocket_bp_lvl_${seasonId}`, String(newLvl));
+
+    setBpXpGained(gainedXp);
+    setBpXpBefore(savedXp);
+    setBpXpAfter(newXp);
+    setBpLevelBefore(savedLvl);
+    setBpLevelAfter(newLvl);
+    setIsBpAdvancedOwned(savedPaid);
+
+    // 3. Trophies calculation
+    const qualifying = gameMode === 'career' || isCompetitiveRanked;
+    const prevTrophies = parseInt(localStorage.getItem('mini_rocket_player_trophies') || '120', 10);
+    const gainedTroph = (qualifying && !isTraining) ? (playerWon ? 10 : -5) : 0;
+    const nextTrophies = Math.max(0, prevTrophies + gainedTroph);
+
+    localStorage.setItem('mini_rocket_player_trophies', String(nextTrophies));
+    setPlayerTrophies(nextTrophies);
+    setTrophiesGained(gainedTroph);
+    setPreviousTrophies(prevTrophies);
+  };
+
+  // Precise frame-rate independent countdown math refs
+  const accumulatedPlayTime = useRef<number>(0);
+  const lastFrameTimeRef = useRef<number>(0);
+  const matchTimerStateRef = useRef<number>(0);
   
   // Settings
   const [isPaused, setIsPaused] = useState(false);
@@ -120,9 +252,102 @@ export default function App() {
   const pauseStart = useRef<number>(0);
   const goalFreezeStart = useRef<number>(0);
 
+  // CAREER SYSTEM MODE STATES & REFS
+  const [isCareerOpen, setIsCareerOpen] = useState(false);
+  const currentMatchHeavyHits = useRef<number>(0);
+  const activeCareerOpponentRef = useRef<string>('Gridlocked Gladiators');
+
+  // SETTINGS & MANAGER SYSTEM STATES
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isManagerOpen, setIsManagerOpen] = useState(false);
+
+  const [language, setLanguage] = useState<'en' | 'es' | 'ca'>(() => {
+    return (localStorage.getItem('mini_rocket_language') as any) || 'en';
+  });
+  const [difficultySetting, setDifficultySetting] = useState<'easy' | 'normal' | 'hard' | 'pro'>(() => {
+    return (localStorage.getItem('mini_rocket_difficulty') as any) || 'normal';
+  });
+  const [musicVolume, setMusicVolume] = useState(() => {
+    const saved = localStorage.getItem('mini_rocket_music_vol');
+    return saved ? parseFloat(saved) : 0.5;
+  });
+  const [sfxVolume, setSfxVolume] = useState(() => {
+    const saved = localStorage.getItem('mini_rocket_sfx_vol');
+    return saved ? parseFloat(saved) : 0.7;
+  });
+  const [cameraSensitivity, setCameraSensitivity] = useState(() => {
+    const saved = localStorage.getItem('mini_rocket_camera_sens');
+    return saved ? parseFloat(saved) : 1.5;
+  });
+  const [replayQuality, setReplayQuality] = useState<'low' | 'medium' | 'high'>(() => {
+    return (localStorage.getItem('mini_rocket_replay_qual') as any) || 'high';
+  });
+
+  const [displayMode, setDisplayMode] = useState<'fullscreen' | 'borderless' | 'windowed'>(() => {
+    return (localStorage.getItem('mini_rocket_display_mode') as any) || 'fullscreen';
+  });
+  const [trainingAssist, setTrainingAssist] = useState<boolean>(() => {
+    const saved = localStorage.getItem('mini_rocket_training_assist');
+    return saved === null ? true : saved === 'true';
+  });
+
+  const handleDisplayModeChange = (mode: 'fullscreen' | 'borderless' | 'windowed') => {
+    setDisplayMode(mode);
+    localStorage.setItem('mini_rocket_display_mode', mode);
+    if (mode === 'fullscreen') {
+      try {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+    } else {
+      try {
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+    }
+  };
+
+  const handleTrainingAssistChange = (on: boolean) => {
+    setTrainingAssist(on);
+    localStorage.setItem('mini_rocket_training_assist', String(on));
+  };
+
+  const handleLanguageChange = (lang: 'en' | 'es' | 'ca') => {
+    setLanguage(lang);
+    localStorage.setItem('mini_rocket_language', lang);
+  };
+  const handleDifficultyChange = (diff: 'easy' | 'normal' | 'hard' | 'pro') => {
+    setDifficultySetting(diff);
+    localStorage.setItem('mini_rocket_difficulty', diff);
+    if (engineRef.current) {
+      engineRef.current.difficulty = diff;
+    }
+  };
+  const handleMusicVolumeChange = (vol: number) => {
+    setMusicVolume(vol);
+    localStorage.setItem('mini_rocket_music_vol', String(vol));
+    sounds.setMusicVolume(vol);
+  };
+  const handleSfxVolumeChange = (vol: number) => {
+    setSfxVolume(vol);
+    localStorage.setItem('mini_rocket_sfx_vol', String(vol));
+    sounds.setSfxVolume(vol);
+  };
+  const handleCameraSensitivityChange = (sens: number) => {
+    setCameraSensitivity(sens);
+    localStorage.setItem('mini_rocket_camera_sens', String(sens));
+  };
+  const handleReplayQualityChange = (qual: 'low' | 'medium' | 'high') => {
+    setReplayQuality(qual);
+    localStorage.setItem('mini_rocket_replay_qual', qual);
+  };
+
   // REPLAY SYSTEM STATES
   const [savedReplays, setSavedReplays] = useState<SavedReplay[]>([]);
   const [selectedReplay, setSelectedReplay] = useState<SavedReplay | null>(null);
+  const [latestSavedReplay, setLatestSavedReplay] = useState<SavedReplay | null>(null);
   const [replayFrameIndex, setReplayFrameIndex] = useState<number>(0);
   const [isReplayPlaying, setIsReplayPlaying] = useState<boolean>(true);
   const [replaySpeed, setReplaySpeed] = useState<number>(1.0);
@@ -178,12 +403,17 @@ export default function App() {
   }, [selectedStadium]);
 
   useEffect(() => {
+    localStorage.setItem('mini_rocket_unlocked_wheels', JSON.stringify(unlockedWheels));
+  }, [unlockedWheels]);
+
+  useEffect(() => {
     localStorage.setItem('mini_rocket_blue_config', JSON.stringify(blueConfig));
     if (engineRef.current) {
       engineRef.current.cars.blue.carModel = blueConfig.model;
       engineRef.current.cars.blue.colorPrimary = blueConfig.primary;
       engineRef.current.cars.blue.colorSecondary = blueConfig.secondary;
       engineRef.current.cars.blue.decal = blueConfig.decal || 'none';
+      engineRef.current.cars.blue.wheels = blueConfig.wheels || 'classic';
     }
   }, [blueConfig]);
 
@@ -194,6 +424,7 @@ export default function App() {
       engineRef.current.cars.red.colorPrimary = redConfig.primary;
       engineRef.current.cars.red.colorSecondary = redConfig.secondary;
       engineRef.current.cars.red.decal = redConfig.decal || 'none';
+      engineRef.current.cars.red.wheels = redConfig.wheels || 'classic';
     }
   }, [redConfig]);
 
@@ -207,10 +438,12 @@ export default function App() {
       engineRef.current.cars.blue.colorPrimary = blueConfig.primary;
       engineRef.current.cars.blue.colorSecondary = blueConfig.secondary;
       engineRef.current.cars.blue.decal = blueConfig.decal || 'none';
+      engineRef.current.cars.blue.wheels = blueConfig.wheels || 'classic';
       engineRef.current.cars.red.carModel = redConfig.model;
       engineRef.current.cars.red.colorPrimary = redConfig.primary;
       engineRef.current.cars.red.colorSecondary = redConfig.secondary;
       engineRef.current.cars.red.decal = redConfig.decal || 'none';
+      engineRef.current.cars.red.wheels = redConfig.wheels || 'classic';
     }
 
     // Check if muted defaults to any local preference if needed
@@ -250,15 +483,38 @@ export default function App() {
         newScale = pWidth / CONFIG.arenaWidth;
       }
       
-      // Prevent over-stretching
-      setScale(Math.min(newScale, 1.1));
+      // Prevent over-stretching inside standard windowed mode, but scale fully in full screen or borderless!
+      setScale(displayMode === 'windowed' ? Math.min(newScale, 1.1) : newScale);
     };
 
     window.addEventListener('resize', handleResize);
     handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
-  }, [phase]);
+  }, [phase, displayMode]);
+
+  // Handle focus loss / refocus for cinematic sport feel
+  useEffect(() => {
+    const handleBlur = () => {
+      if (phase === 'PLAYING' && !isPaused) {
+        setIsPaused(true);
+      }
+    };
+    
+    const handleFocus = () => {
+      // return to full screen if set
+      if (displayMode === 'fullscreen' && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [phase, isPaused, displayMode]);
 
   // Keyboard Event Listeners for smooth action
   useEffect(() => {
@@ -296,9 +552,69 @@ export default function App() {
     setWinner(null);
     setGoalScored(null);
     setIsPaused(false);
+    setLatestSavedReplay(null);
+
+    // DECIDE TEAM DISPLAY NAMES
+    const isManagerMatch = localStorage.getItem('mini_rocket_is_manager_match') === 'true';
+    if (isManagerMatch) {
+      const activeManagerFixtureStr = localStorage.getItem('mini_rocket_active_manager_fixture');
+      const clubName = localStorage.getItem('mini_rocket_manager_club_name') || "Barcelona Rockets";
+      if (activeManagerFixtureStr) {
+        try {
+          const fixture = JSON.parse(activeManagerFixtureStr);
+          setBlueTeamName(fixture.home === 'Barcelona Rockets' || fixture.home === clubName ? clubName : fixture.home);
+          setRedTeamName(fixture.away === 'Barcelona Rockets' || fixture.away === clubName ? clubName : fixture.away);
+        } catch (e) {
+          setBlueTeamName(clubName);
+          setRedTeamName(activeCareerOpponentRef.current || "RED TEAM");
+        }
+      } else {
+        setBlueTeamName(clubName);
+        setRedTeamName(activeCareerOpponentRef.current || "RED TEAM");
+      }
+    } else if (mode === 'career') {
+      const savedCareer = localStorage.getItem('mini_rocket_career_state');
+      let teamBlue = "Neo Strikers";
+      if (savedCareer) {
+        try {
+          const parsed = JSON.parse(savedCareer);
+          teamBlue = parsed.currentTeam;
+        } catch(e) {}
+      }
+      setBlueTeamName(teamBlue);
+      setRedTeamName(activeCareerOpponentRef.current || "RED TEAM");
+    } else {
+      setBlueTeamName("BLUE TEAM");
+      setRedTeamName("RED TEAM");
+    }
     
     if (engineRef.current) {
       engineRef.current.resetMatch();
+
+      // Dynamically load and apply complete player designs from configs so they are perfectly visible in-game!
+      engineRef.current.cars.blue.carModel = blueConfig.model;
+      engineRef.current.cars.blue.colorPrimary = blueConfig.primary;
+      engineRef.current.cars.blue.colorSecondary = blueConfig.secondary;
+      engineRef.current.cars.blue.decal = blueConfig.decal || 'none';
+      engineRef.current.cars.blue.wheels = blueConfig.wheels || 'classic';
+
+      if (mode === 'same_laptop') {
+        engineRef.current.cars.red.carModel = redConfig.model;
+        engineRef.current.cars.red.colorPrimary = redConfig.primary;
+        engineRef.current.cars.red.colorSecondary = redConfig.secondary;
+        engineRef.current.cars.red.decal = redConfig.decal || 'none';
+        engineRef.current.cars.red.wheels = redConfig.wheels || 'classic';
+      } else if (mode === 'career') {
+        // Red team parameters for Career are handled inside launchCareerMatch immediately after calling startGame
+      } else {
+        // In other bots/practice modes, red is a generic opponent bot styled cleanly
+        engineRef.current.cars.red.carModel = 'interstellar';
+        engineRef.current.cars.red.colorPrimary = '#ef4444';
+        engineRef.current.cars.red.colorSecondary = '#f87171';
+        engineRef.current.cars.red.decal = 'none';
+        engineRef.current.cars.red.wheels = 'classic';
+      }
+
       setBlueScore(0);
       setRedScore(0);
     }
@@ -336,11 +652,17 @@ export default function App() {
         if (isGoalReset && goalFreezeStart.current > 0) {
           pausedDuration.current += (Date.now() - goalFreezeStart.current);
           goalFreezeStart.current = 0;
+          lastFrameTimeRef.current = performance.now();
         } else {
           matchStartTime.current = Date.now();
           pausedDuration.current = 0;
           pauseStart.current = 0;
           goalFreezeStart.current = 0;
+          
+          accumulatedPlayTime.current = 0;
+          lastFrameTimeRef.current = performance.now();
+          matchTimerStateRef.current = 0;
+          setMatchTimer(0);
         }
       } else {
         setCountdown(count);
@@ -379,6 +701,7 @@ export default function App() {
     setWinner(null);
     setGoalScored(null);
     setIsPaused(false);
+    setLatestSavedReplay(null);
 
     // Reset recording tracks
     currentReplayFrames.current = [];
@@ -396,6 +719,189 @@ export default function App() {
     setWinner(null);
     setGoalScored(null);
     setIsPaused(false);
+    setLatestSavedReplay(null);
+  };
+
+  const launchCareerMatch = (opponentTeamName: string, difficulty: 'easy' | 'medium' | 'hard' | 'expert' | 'legendary') => {
+    sounds.playCountdownBeep(true);
+    activeCareerOpponentRef.current = opponentTeamName;
+    currentMatchHeavyHits.current = 0; // reset hit counter
+
+    let redPrimary = '#ef4444';
+    let redSecondary = '#f87171';
+    let redDecal: any = 'none';
+
+    if (opponentTeamName.includes("Gladiators")) {
+      redPrimary = '#f97316';
+      redSecondary = '#475569';
+      redDecal = 'stripes';
+    } else if (opponentTeamName.includes("Shredders")) {
+      redPrimary = '#10b981';
+      redSecondary = '#020617';
+      redDecal = 'tech_grid';
+    } else if (opponentTeamName.includes("Giants")) {
+      redPrimary = '#38bdf8';
+      redSecondary = '#1e3a8a';
+      redDecal = 'waves';
+    } else if (opponentTeamName.includes("Sunset")) {
+      redPrimary = '#ff007f';
+      redSecondary = '#06b6d4';
+      redDecal = 'vortex';
+    } else if (opponentTeamName.includes("Singularity")) {
+      redPrimary = '#d946ef';
+      redSecondary = '#090911';
+      redDecal = 'cyber_circuit';
+    }
+
+    let themeStadium = 'emerald';
+    if (opponentTeamName.includes("Gladiators")) themeStadium = 'rustlands';
+    else if (opponentTeamName.includes("Shredders")) themeStadium = 'cyber';
+    else if (opponentTeamName.includes("Giants")) themeStadium = 'frozen';
+    else if (opponentTeamName.includes("Sunset")) themeStadium = 'tokyo';
+    else if (opponentTeamName.includes("Singularity")) themeStadium = 'cosmic';
+
+    setSelectedStadium(themeStadium);
+
+    // Initializing standard career mode variables
+    startGame('career');
+
+    if (engineRef.current) {
+      engineRef.current.cars.red.colorPrimary = redPrimary;
+      engineRef.current.cars.red.colorSecondary = redSecondary;
+      engineRef.current.cars.red.decal = redDecal;
+      engineRef.current.cars.red.carModel = 'interstellar';
+
+      // Load player custom styling
+      engineRef.current.cars.blue.carModel = blueConfig.model;
+      engineRef.current.cars.blue.decal = blueConfig.decal || 'none';
+      engineRef.current.cars.blue.wheels = blueConfig.wheels || 'classic';
+
+      const savedCareer = localStorage.getItem('mini_rocket_career_state');
+      if (savedCareer) {
+        try {
+          const parsed = JSON.parse(savedCareer);
+          engineRef.current.cars.blue.colorPrimary = parsed.currentTeamColor || blueConfig.primary;
+          engineRef.current.cars.blue.colorSecondary = parsed.currentTeamSecondary || blueConfig.secondary;
+        } catch(e) {
+          engineRef.current.cars.blue.colorPrimary = blueConfig.primary;
+          engineRef.current.cars.blue.colorSecondary = blueConfig.secondary;
+        }
+      } else {
+        engineRef.current.cars.blue.colorPrimary = blueConfig.primary;
+        engineRef.current.cars.blue.colorSecondary = blueConfig.secondary;
+      }
+    }
+  };
+
+  const launchManagerSimulatedMatch = (
+    opponentTeamName: string,
+    matchType: '1v1' | '2v2' | '3v3',
+    formation: 'offensive' | 'balanced' | 'defensive',
+    tactics: {
+      aggression: number;
+      riskLevel: number;
+      boostPriority: number;
+      rotationStrictness: number;
+    },
+    lineup: any[],
+    playMode: 'play' | 'watch' = 'watch'
+  ) => {
+    sounds.playCountdownBeep(true);
+    setIsManagerOpen(false);
+
+    // Track state for scorer checking
+    localStorage.setItem('mini_rocket_is_manager_match', 'true');
+    activeCareerOpponentRef.current = opponentTeamName;
+
+    let redPrimary = '#ef4444';
+    let redSecondary = '#f87171';
+    let redDecal: any = 'none';
+
+    if (opponentTeamName.includes("Gladiators")) {
+      redPrimary = '#f97316';
+      redSecondary = '#475569';
+      redDecal = 'stripes';
+    } else if (opponentTeamName.includes("Shredders")) {
+      redPrimary = '#10b981';
+      redSecondary = '#020617';
+      redDecal = 'tech_grid';
+    } else if (opponentTeamName.includes("Giants")) {
+      redPrimary = '#38bdf8';
+      redSecondary = '#1e3a8a';
+      redDecal = 'waves';
+    } else if (opponentTeamName.includes("Sunset")) {
+      redPrimary = '#ff007f';
+      redSecondary = '#06b6d4';
+      redDecal = 'vortex';
+    } else if (opponentTeamName.includes("Singularity")) {
+      redPrimary = '#d946ef';
+      redSecondary = '#090911';
+      redDecal = 'cyber_circuit';
+    }
+
+    let themeStadium = 'emerald';
+    if (opponentTeamName.includes("Gladiators")) themeStadium = 'rustlands';
+    else if (opponentTeamName.includes("Shredders")) themeStadium = 'cyber';
+    else if (opponentTeamName.includes("Giants")) themeStadium = 'frozen';
+    else if (opponentTeamName.includes("Sunset")) themeStadium = 'tokyo';
+    else if (opponentTeamName.includes("Singularity")) themeStadium = 'cosmic';
+
+    setSelectedStadium(themeStadium);
+
+    // Play Mode vs Watch Mode
+    const activeMode: GameMode = playMode === 'play' ? 'career' : 'bot_vs_bot';
+    startGame(activeMode);
+
+    if (engineRef.current) {
+      engineRef.current.matchFormat = matchType;
+      
+      // Determine bot difficulty coefficient
+      if (opponentTeamName.includes("Gladiators")) engineRef.current.difficulty = 'easy';
+      else if (opponentTeamName.includes("Shredders")) engineRef.current.difficulty = 'normal';
+      else if (opponentTeamName.includes("Giants")) engineRef.current.difficulty = 'hard';
+      else engineRef.current.difficulty = 'pro';
+
+      // Primary Blue Driver Setup
+      const primaryPilot = lineup[0] || { name: 'Aero Ace', role: 'striker' };
+      engineRef.current.cars.blue.playerName = primaryPilot.name;
+      engineRef.current.cars.blue.role = primaryPilot.role;
+      engineRef.current.cars.blue.colorPrimary = '#3b82f6';
+      engineRef.current.cars.blue.colorSecondary = '#60a5fa';
+
+      // Store tactician parameters
+      engineRef.current.cars.blue.aggression = tactics.aggression;
+      engineRef.current.cars.blue.riskLevel = tactics.riskLevel;
+      engineRef.current.cars.blue.boostPriority = tactics.boostPriority;
+      engineRef.current.cars.blue.rotationStrictness = tactics.rotationStrictness;
+
+      // Enemy red headliner
+      engineRef.current.cars.red.playerName = 'Challenger Pro';
+      engineRef.current.cars.red.role = 'striker';
+      engineRef.current.cars.red.colorPrimary = redPrimary;
+      engineRef.current.cars.red.colorSecondary = redSecondary;
+      engineRef.current.cars.red.decal = redDecal;
+
+      // Invoke positions realignment to generate companions
+      engineRef.current.resetPositions();
+
+      // Distribute lineup names & táctical metrics to generated blue companions
+      engineRef.current.extraBlueCars.forEach((car, idx) => {
+        const companionPilot = lineup[idx + 1] || lineup[0] || { name: 'Wingman Bot', role: 'defender' };
+        car.playerName = companionPilot.name;
+        car.role = companionPilot.role;
+        car.aggression = tactics.aggression;
+        car.riskLevel = tactics.riskLevel;
+        car.boostPriority = tactics.boostPriority;
+        car.rotationStrictness = tactics.rotationStrictness;
+      });
+
+      // Style red team generated companions
+      engineRef.current.extraRedCars.forEach((car) => {
+        car.colorPrimary = redPrimary;
+        car.colorSecondary = redSecondary;
+        car.decal = redDecal;
+      });
+    }
   };
 
   // REPLAY SYSTEM MANAGEMENT HANDLERS
@@ -421,6 +927,7 @@ export default function App() {
         colorPrimary: engine.cars.blue.colorPrimary,
         colorSecondary: engine.cars.blue.colorSecondary,
         decal: engine.cars.blue.decal,
+        wheels: engine.cars.blue.wheels || 'classic',
       },
       red: {
         x: engine.cars.red.x,
@@ -433,6 +940,7 @@ export default function App() {
         colorPrimary: engine.cars.red.colorPrimary,
         colorSecondary: engine.cars.red.colorSecondary,
         decal: engine.cars.red.decal,
+        wheels: engine.cars.red.wheels || 'classic',
       },
       boostPadsActive: engine.boostPads.map(p => p.active),
       scores: {
@@ -464,6 +972,13 @@ export default function App() {
     // Detect Heavy Bumps
     if (engine.screenShake > 4 && frameIdx - lastHitFrame.current > 20) {
       lastHitFrame.current = frameIdx;
+      
+      const dBlue = Math.hypot(engine.cars.blue.x - engine.ball.x, engine.cars.blue.y - engine.ball.y);
+      const dRed = Math.hypot(engine.cars.red.x - engine.ball.x, engine.cars.red.y - engine.ball.y);
+      if (dBlue < dRed) {
+        currentMatchHeavyHits.current += 1;
+      }
+
       currentReplayEvents.current.push({
         frameIndex: frameIdx,
         type: 'heavy_hit',
@@ -514,6 +1029,7 @@ export default function App() {
 
     const nextReplays = [newReplay, ...savedReplays].slice(0, 10);
     setSavedReplays(nextReplays);
+    setLatestSavedReplay(newReplay);
     localStorage.setItem('mini_rocket_saved_replays', JSON.stringify(nextReplays));
   };
 
@@ -613,6 +1129,7 @@ export default function App() {
     engine.cars.blue.colorPrimary = frame.blue.colorPrimary || '#3b82f6';
     engine.cars.blue.colorSecondary = frame.blue.colorSecondary || '#60a5fa';
     engine.cars.blue.decal = (frame.blue.decal as any) || 'none';
+    engine.cars.blue.wheels = (frame.blue as any).wheels || 'classic';
 
     engine.cars.red.x = frame.red.x;
     engine.cars.red.y = frame.red.y;
@@ -624,6 +1141,7 @@ export default function App() {
     engine.cars.red.colorPrimary = frame.red.colorPrimary || '#ef4444';
     engine.cars.red.colorSecondary = frame.red.colorSecondary || '#f87171';
     engine.cars.red.decal = (frame.red.decal as any) || 'none';
+    engine.cars.red.wheels = (frame.red as any).wheels || 'classic';
 
     frame.boostPadsActive.forEach((active, i) => {
       if (engine.boostPads[i]) {
@@ -688,9 +1206,18 @@ export default function App() {
       if (phase === 'PLAYING' && !isPaused && !winner) {
         engine.update(activeKeys.current, gameMode);
 
-        // Track timer
-        const elapsed = (Date.now() - matchStartTime.current - pausedDuration.current) / 1000;
-        setMatchTimer(Math.max(0, elapsed));
+        // Track timer - high-precision frame-rate independent with strict delta threshold caps
+        const now = performance.now();
+        let dt = (now - lastFrameTimeRef.current) / 1000;
+        lastFrameTimeRef.current = now;
+
+        if (dt > 0.1) {
+          dt = 0.0166; // protection clamp against tab backgrounding pauses
+        }
+
+        accumulatedPlayTime.current += dt;
+        const elapsed = accumulatedPlayTime.current;
+        setMatchTimer(Math.max(0, Math.floor(elapsed)));
 
         // Sync local score states instantly
         const currentBlueScore = engine.cars.blue.score;
@@ -707,10 +1234,44 @@ export default function App() {
         // 5 Minutes time limit check (300 seconds)
         if (elapsed >= 300 && currentBlueScore !== currentRedScore) {
           const limitWinner = currentBlueScore > currentRedScore ? 'blue' : 'red';
+          const isManagerMatch = localStorage.getItem('mini_rocket_is_manager_match') === 'true';
+          const managerFixtureStr = localStorage.getItem('mini_rocket_active_manager_fixture');
+          const clubName = localStorage.getItem('mini_rocket_manager_club_name') || "Barcelona Rockets";
+
+          if (isManagerMatch && managerFixtureStr) {
+            try {
+              const fixture = JSON.parse(managerFixtureStr);
+              const pendingResult = {
+                fixtureId: fixture.id,
+                blueGoals: currentBlueScore,
+                redGoals: currentRedScore,
+                won: limitWinner === 'blue',
+                opponentTeam: fixture.home === 'Barcelona Rockets' || fixture.home === clubName ? fixture.away : fixture.home
+              };
+              localStorage.setItem('mini_rocket_pending_manager_match', JSON.stringify(pendingResult));
+              setIsManagerOpen(true);
+            } catch (e) {
+              console.error(e);
+            }
+            localStorage.removeItem('mini_rocket_is_manager_match');
+            localStorage.removeItem('mini_rocket_active_manager_fixture');
+          } else if (gameMode === 'career') {
+            const opponentTeamName = activeCareerOpponentRef.current || 'Gridlocked Gladiators';
+            const pendingResult = {
+              won: limitWinner === 'blue',
+              blueGoals: currentBlueScore,
+              redGoals: currentRedScore,
+              heavyHits: currentMatchHeavyHits.current,
+              opponentTeam: opponentTeamName
+            };
+            localStorage.setItem('mini_rocket_pending_career_match', JSON.stringify(pendingResult));
+            setIsCareerOpen(true);
+          }
           setWinner(limitWinner);
           setPhase('MENU');
           sounds.playWin();
-          setCoins((prev) => prev + 100);
+
+          processMatchRewardsAndSaves(limitWinner === 'blue');
           return;
         }
 
@@ -719,16 +1280,52 @@ export default function App() {
           const scorer = engine.goalScoredThisFrame;
           setGoalScored(scorer);
 
-          // Increment coins pool for scoring a goal
-          setCoins((prev) => prev + 15);
+          // Increment coins pool for scoring a goal (only for exhibition matches)
+          const isManagerMatch = localStorage.getItem('mini_rocket_is_manager_match') === 'true';
+          if (gameMode !== 'career' && !isManagerMatch) {
+            setCoins((prev) => prev + 15);
+          }
 
           // Check Win Condition (Max score reached, OR we were in overtime/sudden death, meaning this is the Golden Goal!)
           if (engine.cars[scorer].score >= CONFIG.maxScore && gameMode !== 'free_practice' && gameMode !== 'machine_practice') {
             setPhase('GOAL_SCORD'); // Freeze updates only on final victory target
-            // Increment coins pool for match victory bonus
-            setCoins((prev) => prev + 100);
+            
+            processMatchRewardsAndSaves(scorer === 'blue');
 
             winTimeoutRef.current = setTimeout(() => {
+              const innerIsManager = localStorage.getItem('mini_rocket_is_manager_match') === 'true';
+              const innerFixtureStr = localStorage.getItem('mini_rocket_active_manager_fixture');
+              const innerClubName = localStorage.getItem('mini_rocket_manager_club_name') || "Barcelona Rockets";
+
+              if (innerIsManager && innerFixtureStr) {
+                try {
+                  const fixture = JSON.parse(innerFixtureStr);
+                  const pendingResult = {
+                    fixtureId: fixture.id,
+                    blueGoals: engine.cars.blue.score,
+                    redGoals: engine.cars.red.score,
+                    won: scorer === 'blue',
+                    opponentTeam: fixture.home === 'Barcelona Rockets' || fixture.home === innerClubName ? fixture.away : fixture.home
+                  };
+                  localStorage.setItem('mini_rocket_pending_manager_match', JSON.stringify(pendingResult));
+                  setIsManagerOpen(true);
+                } catch (e) {
+                  console.error(e);
+                }
+                localStorage.removeItem('mini_rocket_is_manager_match');
+                localStorage.removeItem('mini_rocket_active_manager_fixture');
+              } else if (gameMode === 'career') {
+                const opponentTeamName = activeCareerOpponentRef.current || 'Gridlocked Gladiators';
+                const pendingResult = {
+                  won: scorer === 'blue',
+                  blueGoals: engine.cars.blue.score,
+                  redGoals: engine.cars.red.score,
+                  heavyHits: currentMatchHeavyHits.current,
+                  opponentTeam: opponentTeamName
+                };
+                localStorage.setItem('mini_rocket_pending_career_match', JSON.stringify(pendingResult));
+                setIsCareerOpen(true);
+              }
               setWinner(scorer);
               setPhase('MENU'); // stops the updates, overlays the Win panel
               sounds.playWin();
@@ -749,7 +1346,11 @@ export default function App() {
             }, 1200);
           }
         }
-      } else if (phase === 'GOAL_SCORD') {
+      } else {
+        lastFrameTimeRef.current = performance.now();
+      }
+
+      if (phase === 'GOAL_SCORD') {
         // Still update particles and ball (with friction) during final game-over/celebration flow
         engine.update({}, gameMode);
         recordCurrentFrame();
@@ -1228,8 +1829,8 @@ export default function App() {
     ctx.arc(engine.ball.x + shadowOffset, engine.ball.y + shadowOffset, engine.ball.radius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Car shadows
-    [engine.cars.blue, engine.cars.red].forEach(car => {
+    // Car shadows for all drivers
+    engine.getAllCars().forEach(car => {
       ctx.save();
       ctx.translate(car.x + shadowOffset, car.y + shadowOffset);
       ctx.rotate(car.angle);
@@ -1305,7 +1906,7 @@ export default function App() {
 
 
     // H. Draw Cars
-    [engine.cars.blue, engine.cars.red].forEach(car => {
+    engine.getAllCars().forEach(car => {
       ctx.save();
       ctx.translate(car.x, car.y);
       ctx.rotate(car.angle);
@@ -1329,14 +1930,43 @@ export default function App() {
       ctx.fill();
       ctx.restore();
 
-      // 2. Wheels (four black rectangles at corners)
-      ctx.fillStyle = '#0f172a';
+      // 2. Wheels (four custom-styled tires and glowing rims at corners)
+      const wheelId = car.wheels || 'classic';
+      const wheelTheme = (WHEEL_TYPES as any)[wheelId] || WHEEL_TYPES.classic;
       const wheelW = 12;
       const wheelH = 6;
-      ctx.fillRect(-cw / 2 + 6, -ch / 2 - 3, wheelW, wheelH); // Front-Left
-      ctx.fillRect(cw / 2 - 18, -ch / 2 - 3, wheelW, wheelH);  // Front-Right
-      ctx.fillRect(-cw / 2 + 6, ch / 2 - 3, wheelW, wheelH);  // Rear-Left
-      ctx.fillRect(cw / 2 - 18, ch / 2 - 3, wheelW, wheelH);   // Rear-Right
+
+      ctx.save();
+      const drawWheel = (x: number, y: number) => {
+        // Tire base outline and body
+        ctx.fillStyle = wheelTheme.color;
+        ctx.strokeStyle = '#090d16';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(x, y, wheelW, wheelH, 1.5);
+        ctx.fill();
+        ctx.stroke();
+
+        // Alloy / Rim center accent
+        ctx.fillStyle = wheelTheme.rim;
+        ctx.beginPath();
+        ctx.roundRect(x + 2, y + 1.2, wheelW - 4, wheelH - 2.4, 1);
+        ctx.fill();
+
+        // Subtle wheel spinner dot for non-classic wheels
+        if (wheelId !== 'classic') {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(x + wheelW / 2, y + wheelH / 2, 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      };
+
+      drawWheel(-cw / 2 + 6, -ch / 2 - 3); // Front-Left
+      drawWheel(cw / 2 - 18, -ch / 2 - 3);  // Front-Right
+      drawWheel(-cw / 2 + 6, ch / 2 - 3);  // Rear-Left
+      drawWheel(cw / 2 - 18, ch / 2 - 3);   // Rear-Right
+      ctx.restore();
 
       // 3 & 4 & 5 & 6. Main Car Design depending on the equipped model
       const model = car.carModel || 'interstellar';
@@ -1691,7 +2321,7 @@ export default function App() {
 
         ctx.fillStyle = car.colorSecondary;
         ctx.fillRect(-cw * 0.2, -ch * 0.15, cw * 0.5, ch * 0.3);
-      } else if (model === 'spectre') {
+      } else if (model === 'spectre_electro') {
         // --- SPECTRE ELECTRO (High-voltage pulse supercar) ---
         ctx.fillStyle = car.colorPrimary;
         ctx.strokeStyle = '#eab308';
@@ -1778,6 +2408,34 @@ export default function App() {
         ctx.arc(-cw * 0.25, ch * 0.25, 4, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0; // reset
+      } else if (model === 'nemesis') {
+        // --- NEMESIS Stealth Tech ---
+        ctx.fillStyle = car.colorPrimary;
+        ctx.strokeStyle = '#6d28d9';
+        ctx.lineWidth = 2.5;
+        
+        ctx.beginPath();
+        ctx.moveTo(-cw / 2, -ch * 0.35);
+        ctx.lineTo(-cw * 0.1, -ch * 0.48);
+        ctx.lineTo(cw * 0.3, -ch * 0.32);
+        ctx.lineTo(cw / 2 + 8, 0); // sleek stealth nose
+        ctx.lineTo(cw * 0.3, ch * 0.32);
+        ctx.lineTo(-cw * 0.1, ch * 0.48);
+        ctx.lineTo(-cw / 2, ch * 0.35);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = car.colorSecondary;
+        ctx.beginPath();
+        ctx.ellipse(cw * 0.05, 0, cw * 0.18, ch * 0.12, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Dual plasma exhausts
+        ctx.fillStyle = '#6d28d9';
+        ctx.fillRect(-cw / 2 - 3, -ch * 0.18, 4, ch * 0.08);
+        ctx.fillRect(-cw / 2 - 3, ch * 0.10, 4, ch * 0.08);
       } else {
         // --- INTERSTELLAR (Classic Championship Speedster Default) ---
         ctx.fillStyle = car.colorPrimary;
@@ -2050,7 +2708,11 @@ export default function App() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-[#050505] font-sans select-none overflow-hidden text-white relative">
+    <div className="w-screen h-screen flex flex-col items-center justify-center cyber-canvas-bg font-sans select-none overflow-hidden text-white relative">
+      
+      {/* Immersive esport-ambient dynamic pulsing glow elements */}
+      <div className="cyber-glow-blob-1 animate-cyber-pulse-fast" />
+      <div className="cyber-glow-blob-2 animate-cyber-pulse-slow" />
       
       {/* 1. MAIN MENU STAGE */}
       {phase === 'MENU' && !winner && (
@@ -2081,8 +2743,123 @@ export default function App() {
             setCoins((prev) => Math.max(0, prev - price));
             setUnlockedDecals((prev) => [...prev, decalId]);
           }}
+          unlockedWheels={unlockedWheels}
+          onBuyWheel={(wheelId, price) => {
+            setCoins((prev) => Math.max(0, prev - price));
+            setUnlockedWheels((prev) => [...prev, wheelId]);
+          }}
           selectedStadium={selectedStadium}
           onSelectStadium={setSelectedStadium}
+          onOpenCareer={() => {
+            sounds.playCountdownBeep(true);
+            setIsCareerOpen(true);
+          }}
+          onOpenSettings={() => {
+            sounds.playCountdownBeep(true);
+            setIsSettingsOpen(true);
+          }}
+          onOpenManager={() => {
+            sounds.playCountdownBeep(true);
+            setIsManagerOpen(true);
+          }}
+          onOpenBattlePass={() => {
+            sounds.playCountdownBeep(true);
+            setIsBattlePassOpen(true);
+          }}
+          onOpenTrophies={() => {
+            sounds.playCountdownBeep(true);
+            setIsTrophiesOpen(true);
+          }}
+          language={language}
+        />
+      )}
+
+      {/* STORY Mode Dashboard Overlay */}
+      {isCareerOpen && (
+        <CareerMode
+          language={language}
+          onClose={() => setIsCareerOpen(false)}
+          onLaunchCareerMatch={launchCareerMatch}
+          coins={coins}
+          onAddCoins={(amount) => {
+            setCoins(prev => {
+              const next = prev + amount;
+              localStorage.setItem('mini_rocket_coins', String(next));
+              return next;
+            });
+          }}
+          onUpdatePlayerCarColors={(primary, secondary) => {
+            setBlueConfig(prev => {
+              const next = { ...prev, primary, secondary };
+              localStorage.setItem('mini_rocket_blue_config', JSON.stringify(next));
+              return next;
+            });
+          }}
+        />
+      )}
+
+      {/* Dynamic Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        language={language}
+        onLanguageChange={handleLanguageChange}
+        difficulty={difficultySetting}
+        onDifficultyChange={handleDifficultyChange}
+        musicVolume={musicVolume}
+        onMusicVolumeChange={handleMusicVolumeChange}
+        sfxVolume={sfxVolume}
+        onSfxVolumeChange={handleSfxVolumeChange}
+        cameraSensitivity={cameraSensitivity}
+        onCameraSensitivityChange={handleCameraSensitivityChange}
+        replayQuality={replayQuality}
+        onReplayQualityChange={handleReplayQualityChange}
+        displayMode={displayMode}
+        onDisplayModeChange={handleDisplayModeChange}
+        trainingAssist={trainingAssist}
+        onTrainingAssistChange={handleTrainingAssistChange}
+      />
+
+      {/* Dynamic Team Squad Manager Mode */}
+      {isManagerOpen && (
+        <ManagerMode
+          isOpen={isManagerOpen}
+          onClose={() => setIsManagerOpen(false)}
+          language={language}
+          coins={coins}
+          onAddCoins={handleAddCoins}
+          onLaunchSimulatedMatch={launchManagerSimulatedMatch}
+        />
+      )}
+
+      {/* Battle Pass Modal Overlay */}
+      {isBattlePassOpen && (
+        <BattlePassModal
+          isOpen={isBattlePassOpen}
+          onClose={() => setIsBattlePassOpen(false)}
+          coins={coins}
+          onAddCoins={handleAddCoins}
+          unlockedModels={unlockedModels}
+          onAddUnlockedModel={handleAddUnlockedModel}
+          unlockedPalettes={unlockedPalettes}
+          onAddUnlockedPalette={handleAddUnlockedPalette}
+          unlockedDecals={unlockedDecals}
+          onAddUnlockedDecal={handleAddUnlockedDecal}
+          unlockedWheels={unlockedWheels}
+          onAddUnlockedWheels={handleAddUnlockedWheels}
+          language={language}
+        />
+      )}
+
+      {/* Trophies Arena / Leaderboard Modal Overlay */}
+      {isTrophiesOpen && (
+        <TrophiesLeaderboardModal
+          isOpen={isTrophiesOpen}
+          onClose={() => setIsTrophiesOpen(false)}
+          playerTrophies={playerTrophies}
+          playerName={playerName}
+          onUpdatePlayerName={handleUpdatePlayerName}
+          language={language}
         />
       )}
 
@@ -2102,8 +2879,23 @@ export default function App() {
           onRestart={restartMatch}
           onExit={exitToMenu}
           onSaveReplay={handleSaveReplay}
+          onPlayLatestReplay={latestSavedReplay ? () => handlePlayReplay(latestSavedReplay) : undefined}
           blueModel={blueConfig.model}
           redModel={redConfig.model}
+          blueTeamName={blueTeamName}
+          redTeamName={redTeamName}
+          gameMode={gameMode}
+          currentCoins={coins}
+          language={language}
+          bpXpGained={bpXpGained}
+          bpXpBefore={bpXpBefore}
+          bpXpAfter={bpXpAfter}
+          bpLevelBefore={bpLevelBefore}
+          bpLevelAfter={bpLevelAfter}
+          isAdvancedPassOwned={isBpAdvancedOwned}
+          isCompetitiveRanked={isCompetitiveRanked || gameMode === 'career'}
+          trophiesGained={trophiesGained}
+          previousTrophies={previousTrophies}
         />
       )}
 
@@ -2126,11 +2918,17 @@ export default function App() {
       {/* 3. HTML5 CANVAS STAGE CONTAINER */}
       <div 
         id="canvas-viewport"
-        className="w-full h-full flex items-center justify-center p-3 sm:p-6"
+        className={`w-full h-full flex items-center justify-center transition-all ${
+          displayMode === 'windowed' ? 'p-3 sm:p-6' : 'p-0 m-0'
+        }`}
         style={{ pointerEvents: 'none' }}
       >
         <div 
-          className="relative rounded-2xl overflow-hidden shadow-3xl border border-slate-800 bg-slate-900 transition-transform duration-200"
+          className={`relative overflow-hidden bg-[#020512] transition-transform duration-200 ${
+            displayMode === 'windowed' 
+              ? 'rounded-2xl border border-zinc-800 shadow-3xl' 
+              : 'rounded-none border-0 shadow-none'
+          }`}
           style={{
             width: `${CONFIG.arenaWidth}px`,
             height: `${CONFIG.arenaHeight}px`,
